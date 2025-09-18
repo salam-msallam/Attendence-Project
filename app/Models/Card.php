@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use HasFactory;
+class Card extends Model
+{
+    protected $table='Cards';
+    protected $fillable=[
+        'code'
+    ];
+    
+   public function user():BelongTo{
+    return $this->belongTo(User::class,'user_id');
+   }
+}
