@@ -36,14 +36,16 @@ class CardController extends Controller
         return $card;
     }
 
-    public function createCardForUser($user_id){
+    public function createCardForUser(Request $request,$user_id){
         $user=User::find($user_id);
         if($user){
             $card = $user->card()->create([
-                "code"=>$request->input("code")
+                "code"=>$request->input('code')
             ]);
             return "card Created successfully";
         }
         throw Exception("f;lkj");
     }
+
+    
 }
