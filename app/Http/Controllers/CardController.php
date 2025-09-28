@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Card;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Foundation\Configuration\Exceptions;
 
 class CardController extends Controller
 {
@@ -44,8 +45,6 @@ class CardController extends Controller
             ]);
             return "card Created successfully";
         }
-        throw Exception("f;lkj");
+       return "failed";
     }
-
-    
 }

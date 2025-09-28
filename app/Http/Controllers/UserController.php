@@ -18,7 +18,7 @@ class UserController extends Controller
         return $user;
     }
     
-    function getAllUsers(Request $request){
+    function getAllUsers(){
         $AllUsers=User::all();
         return $AllUsers;
     }

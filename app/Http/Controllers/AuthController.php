@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Models\Card;
+use App\Models\CardTransaction;
+use App\Models\User;
 class AuthController extends Controller
 {
     function login(Request $request){

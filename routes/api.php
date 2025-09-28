@@ -4,8 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
-use App\Http\Controllers\cardTrasactionController;
+use App\Http\Controllers\CardTransactionController;
 use App\Http\Controllers\AuthController;
+use App\Models\User;
+use App\Models\Card;
+use App\Models\CardTransaction;
 
 Route::post('/createUser',UserController::class.'@createUser');
 
@@ -29,7 +32,11 @@ Route::put('/updateCard/{card_id}',CardController::class.'@updateCard');
 
 Route::delete('/deleteCard/{card_id}',CardController::class.'@deleteCard');
 
-Route ::post('/creatCardTransaction/{code}',cardTrasactionController::class.'@createCardTransaction'); 
+Route ::post('/creatCardTransaction/{code}',CardTransactionController::class.'@CreateCardTransaction'); //esp
+
+Route::get('/DateOfAttendance',CardTransactionController::class.'@GetDateOfAttendance');//Flutter
+
+Route::get('/Profile',CardTransactionController::class.'@GetUserProfile');
 
 Route::post('/login',AuthController::class.'@login');
 

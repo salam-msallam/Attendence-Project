@@ -4,6 +4,8 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\cardTranacion;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\CardTransaction;
 use HasFactory;
 class Card extends Model
 {
@@ -12,11 +14,11 @@ class Card extends Model
         'code'
     ];
     
-   public function user():BelongTo{
+   public function user():BelongsTo{
     return $this->belongTo(User::class,'user_id');
    }
    
-   public function cardTranacion():BelongTo{
-    return $this->belongTo(cardTranacion::class);
+   public function cardTranacion():BelongsTo{
+    return $this->belongTo(CardTransaction::class);
 }
 }
