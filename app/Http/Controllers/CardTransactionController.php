@@ -17,9 +17,9 @@ class CardTransactionController extends Controller
             $cardTranaction=CardTransaction::create([
                 'card_id'=>$card->id
             ]);
-            return response()->json(["status"=>"Successfully"]);
+            return response()->json(["status"=>"Successfully"],201);
         }
-        return  response()->json(["status"=>"Failed"]);
+        return  response()->json(["status"=>"Not Found"],404);
         
     }
     
