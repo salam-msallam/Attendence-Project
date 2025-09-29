@@ -19,6 +19,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user_info', function () {
         return response()->json(auth()->user());
     });
+    
+    Route::get('/DateOfAttendance',CardTransactionController::class.'@GetDateOfAttendance');//Flutter
 });
 
 Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->group(function(){
@@ -32,7 +34,7 @@ Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->gr
 
     Route::put('/updateUser/{id}',UserController::class.'@updateUser');
 
-    Route::post('/createCard',CardController::class.'@createCard');
+    //Route::post('/createCard',CardController::class.'@createCard');
 
     Route::post('/createCard/{user_id}',CardController::class.'@createCardForUser');
 
@@ -46,7 +48,7 @@ Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->gr
 
     Route ::post('/creatCardTransaction/{code}',CardTransactionController::class.'@CreateCardTransaction'); //esp
 
-    Route::get('/DateOfAttendance',CardTransactionController::class.'@GetDateOfAttendance');//Flutter
+  
 
     Route::get('/Profile',CardTransactionController::class.'@GetUserProfile');
 

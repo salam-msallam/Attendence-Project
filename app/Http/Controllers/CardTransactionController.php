@@ -24,7 +24,11 @@ class CardTransactionController extends Controller
     }
     
     function GetDateOfAttendance(){
-        $getAllUserTransaction = CardTransaction::all();
+        $user = auth()->user();
+        $card_id= $user->id;
+       // $transaction_user=$card_id;
+       $getAllUserTransaction = CardTransaction::where('card_id', $card_id)->get();
+       // $getAllUserTransaction = CardTransaction::all($card_id);
 
         $attendanceList = $getAllUserTransaction->map(
             function($transaction){
@@ -35,10 +39,13 @@ class CardTransactionController extends Controller
                 ];
             });
         return response()->json([
+            'user_id' =>$user->id,
             'attendance_records' => $attendanceList
         ]);
     }
 
+
+    
     function GetUserProfile(){
         
     }
