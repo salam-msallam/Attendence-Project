@@ -1,3 +1,4 @@
+<?php 
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
