@@ -11,47 +11,43 @@ use Carbon\Carbon;
 
 class CardTransactionController extends Controller
 {
-    // function SetTypeTransaction($id){
-    //     $cardTranaction=CardTransaction::where('card_id',$id)->last();
-
-    //     if($cardTranaction){
-    //         if($cardTranaction->type=="Exit"){
-    //             $cardTranaction->type="enter";
-    //         }
-    //         else if($cardTranaction->type=="enter"){
-    //             $cardTranaction->type="Exit";
-    //         }
-        
-
-    // }
     function CreateCardTransaction($code){
         //Validate & Get card by code
         $card=Card::where('code',$code)->first();
 
         // Create cardTransacation 
         if($card){
-            $cardTranaction=CardTransaction::where('card_id',$card->id)->latest()->first();
-            $newType="enter";
-            if($cardTranaction){
-                if($cardTranaction->type=="Exit"){
-                    $newType="enter";
-                }
-                else $newType="Exit";
-            }
-
                     $cardTranaction=CardTransaction::create([
                         'card_id'=>$card->id,
-                        'type'=>$newType
+                        'type'=>"enter"
                     ]);
-                
-            
-            // -> type of this cardTransaction is enter
-          
                 
             return response()->json(["status"=>"Successfully"],201);
         }
         return  response()->json(["status"=>"Not Found"],404);
         
+    }
+    function logoutFromclub(){
+        $user = auth()->user();
+        if(!$user){
+            return response()->json(['message'=>'Unauthenticated'],401);
+        }
+        $card=Card::where('user_id',$user->id)->first();
+        if(!$card){
+            return response()->json(['message'=>'No attendanc card found for this user'],404);
+        }
+        $cardTranaction=CardTransaction::where('card_id',$card->id)->latest()->first();
+        if(!$cardTranaction||$cardTranaction->type=="Exit"){
+            return response()->json(['message'=>'you are logout already'],404);
+        }
+        $cardTranaction=CardTransaction::create([
+            'card_id'=>$card->id,
+            'type'=>"Exit"
+        ]);
+            
+
+        
+    //    $this->CreateCardTransaction($card->code);
     }
     
     
