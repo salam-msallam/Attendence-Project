@@ -17,12 +17,14 @@ Route::post('/login',AuthController::class.'@login');
 Route::post('/createUser',UserController::class.'@createUser');
 
 
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/user_info', function () {
         return response()->json(auth()->user());
     });
     
     Route::get('/DateOfAttendance',CardTransactionController::class.'@GetDateOfAttendance');//Flutter
+    Route::post('/logout',CardTransactionController::class.'@logoutFromclub');
 });
 
 Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->group(function(){
