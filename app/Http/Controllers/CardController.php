@@ -8,12 +8,13 @@ use Illuminate\Foundation\Configuration\Exceptions;
 
 class CardController extends Controller
 {
-    function createCard(Request $request){
-        $card=Card::create([
-            "code"=>$request->input("code")
-        ]);
-        return $card;
-    }
+    // function createCard(Request $request){
+    //     $card=Card::create([
+    //         "code"=>$request->input("code")
+    //     ]);
+    //     return $card;
+    // }
+
     function getAllCards(Request $request){
         $AllCards=Card::all();
         return $AllCards;
@@ -30,11 +31,15 @@ class CardController extends Controller
         return "Card deleted";
     }
 
-    function updateCard($id){
+    function updateCard(Request $request,$id){
         $card =Card::find($id);
-        $card->code = "567-456";
+        if(!$card){
+             return response()->json(['message'=>'Card Not Found'],404);
+        }
+        $CodeCardUpdate = $request->only(['code']);
+        $card->update($CodeCardUpdate);
         $card->save();
-        return $card;
+        return response()->json(['message'=>'Card  Updated successfully'],200);
     }
 
     public function createCardForUser(Request $request,$user_id){
