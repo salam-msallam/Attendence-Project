@@ -5,9 +5,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Models\Card;
-use App\Models\CardTransaction;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     function login(Request $request){
@@ -36,18 +34,26 @@ class AuthController extends Controller
                 'token' => $token
             ]
         ]);
-    }catch(ValidationException $e){
-        return response()->json([
-            'code'=>422,
-            'message'=>'Data was invalid',
-            'errors'=>$e->errors()
-        ],422);
-    }catch(BadRequestHttpException $e){
-        return response()->json([
-            'code'=>400,
-            'message' =>'please check your Json syntax',
-            'data'=>null
-        ],400);
+        }catch(ValidationException $e){
+            return response()->json([
+                'code'=>422,
+                'message'=>'Data was invalid',
+                'errors'=>$e->errors()
+            ],422);
+        }catch(BadRequestHttpException $e){
+            return response()->json([
+                'code'=>400,
+                'message' =>'please check your Json syntax',
+                'data'=>null
+            ],400);
+        }
     }
-}
+
+    function Logout(){
+        Auth::guard('api')->logout(); 
+
+        return response()->json([
+            'message' => 'Successfully logged out '
+        ], 200);
+    }
 }

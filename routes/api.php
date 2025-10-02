@@ -6,15 +6,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardTransactionController;
 use App\Http\Controllers\AuthController;
-use App\Models\User;
-use App\Models\Card;
-use App\Models\CardTransaction;
 
 
-
+// Route::delete('/logout', AuthController::class, '@logout');
 
 Route::post('/login',AuthController::class.'@login');
-Route::post('/createUser',UserController::class.'@createUser');
+
+Route ::post('/Transaction/{code}',CardTransactionController::class.'@CreateCardTransaction'); //esp
 
 
 
@@ -23,40 +21,35 @@ Route::middleware('auth:api')->group(function () {
         return response()->json(auth()->user());
     });
     
-    Route::get('/DateOfAttendance',CardTransactionController::class.'@GetDateOfAttendance');//Flutter
     Route::post('/logout',CardTransactionController::class.'@logoutFromclub');
+    Route::get('/Attendance_Records',CardTransactionController::class.'@Attendance_Records_For_User');//Flutter
+    Route::get('/Profile',CardTransactionController::class.'@getTotalMonthlyAttendance');
+    Route::post('/logout',AuthController::class.'@Logout');
+    
 });
 
 Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->group(function(){
 
-   
-    
-    Route::get('/getAllUser',UserController::class.'@getAllUsers');
+    //User
+    Route::post('/User',UserController::class.'@createUser');
 
-    Route::get('/getUser/{id}',UserController::class.'@getUser');
+    Route::get('/User',UserController::class.'@getAllUsers');
 
-    Route::delete('/deleteUser/{id}',UserController::class.'@deleteUser');
+    Route::get('/User/{id}',UserController::class.'@getUser');
 
-    Route::put('/updateUser/{id}',UserController::class.'@updateUser');
+    Route::delete('/User/{id}',UserController::class.'@deleteUser');
 
-    //Route::post('/createCard',CardController::class.'@createCard');
+    Route::put('/User/{id}',UserController::class.'@updateUser');
 
-    Route::post('/createCard/{user_id}',CardController::class.'@createCardForUser');
+    //Card
+    Route::post('/Card/{user_id}',CardController::class.'@createCardForUser');
 
-    Route::get('/getAllcard',CardController::class.'@getAllCards');
+    Route::get('/Card',CardController::class.'@getAllCards');
 
-    Route::get('/getcard/{card_id}',CardController::class.'@getCard');
+    Route::get('/Card/{card_id}',CardController::class.'@getCard');
 
-    Route::put('/updateCard/{card_id}',CardController::class.'@updateCard');
+    Route::put('/Card/{card_id}',CardController::class.'@updateCard');
 
-    Route::delete('/deleteCard/{card_id}',CardController::class.'@deleteCard');
-
-    Route ::post('/creatCardTransaction/{code}',CardTransactionController::class.'@CreateCardTransaction'); //esp
-
-  
-
-    Route::get('/Profile',CardTransactionController::class.'@GetUserProfile');
-
-
+    Route::delete('/Card/{card_id}',CardController::class.'@deleteCard');
 });
 
