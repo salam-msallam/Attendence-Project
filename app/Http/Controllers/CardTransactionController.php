@@ -71,13 +71,6 @@ class CardTransactionController extends Controller
         
     }
 
-    // function FindCardByCode($code){
-    //     $card=Card::find($code);
-    //     $IsFind=false;
-    //     if($card){
-    //         $IsFind=True;
-    //     }
-    //     return $IsFind;
-    // }
+    
 }
 
