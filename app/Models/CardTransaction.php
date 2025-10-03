@@ -13,7 +13,8 @@ class CardTransaction extends Model
     protected $table='Card-Transaction';
 
     protected $fillable=[
-        'card_id'
+        'card_id',
+        'type'
     ];
 
     public function cardTranacion():HasMany{
