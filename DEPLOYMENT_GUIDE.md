@@ -278,9 +278,9 @@ crontab -e
 
 ### Performance Optimization
 
-1. **Enable Redis caching**
+1. **Enable file-based caching**
    - Already configured in docker-compose.yml
-   - Verify Redis is working: `docker-compose exec redis redis-cli ping`
+   - Uses Laravel's file cache driver for simplicity
 
 2. **Optimize PHP-FPM**
    - Adjust `pm.max_children` in `docker/php-fpm.conf`
@@ -352,7 +352,7 @@ To scale your application:
 
 1. **Horizontal scaling**: Use multiple app containers behind a load balancer
 2. **Database scaling**: Consider MySQL master-slave replication
-3. **Caching**: Implement Redis clustering for high availability
+3. **Caching**: Use file-based caching or consider database caching for high availability
 4. **File storage**: Use cloud storage (S3, etc.) for file uploads
 
 Remember to monitor resource usage and adjust container limits as needed.

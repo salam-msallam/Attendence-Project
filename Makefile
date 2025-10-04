@@ -29,8 +29,6 @@ logs-app: ## Show logs for app service
 logs-mysql: ## Show logs for MySQL service
 	docker-compose logs -f mysql
 
-logs-redis: ## Show logs for Redis service
-	docker-compose logs -f redis
 
 # Application commands
 shell: ## Access app container shell
@@ -108,8 +106,6 @@ health: ## Check application health
 	@curl -f http://localhost:8000/health || echo "Application is not responding"
 	@echo "Checking MySQL connection..."
 	@docker-compose exec mysql mysql -u root -p$$(grep DB_ROOT_PASSWORD docker.env | cut -d '=' -f2) -e "SELECT 1;" > /dev/null && echo "MySQL is healthy" || echo "MySQL connection failed"
-	@echo "Checking Redis connection..."
-	@docker-compose exec redis redis-cli ping | grep PONG && echo "Redis is healthy" || echo "Redis connection failed"
 
 # Status
 status: ## Show container status

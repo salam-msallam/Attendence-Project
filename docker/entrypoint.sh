@@ -13,13 +13,6 @@ while ! nc -z mysql 3306; do
 done
 echo "MySQL is up - continuing"
 
-# Wait for Redis to be ready
-echo "Waiting for Redis to be ready..."
-while ! nc -z redis 6379; do
-    echo "Redis is unavailable - sleeping"
-    sleep 2
-done
-echo "Redis is up - continuing"
 
 # Copy environment file if it doesn't exist
 if [ ! -f .env ]; then

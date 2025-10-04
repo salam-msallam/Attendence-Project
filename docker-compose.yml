@@ -20,17 +20,6 @@ services:
       - attendance_network
     command: --default-authentication-plugin=mysql_native_password
 
-  # Redis (for caching and sessions)
-  redis:
-    image: redis:7-alpine
-    container_name: attendance_redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - attendance_network
 
   # Laravel Application
   app:
@@ -48,15 +37,11 @@ services:
       - DB_DATABASE=${DB_DATABASE:-attendance_db}
       - DB_USERNAME=${DB_USERNAME:-attendance_user}
       - DB_PASSWORD=${DB_PASSWORD:-attendance_password}
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=
-      - CACHE_DRIVER=redis
-      - SESSION_DRIVER=redis
-      - QUEUE_CONNECTION=redis
+      - CACHE_DRIVER=file
+      - SESSION_DRIVER=file
+      - QUEUE_CONNECTION=sync
     depends_on:
       - mysql
-      - redis
     volumes:
       - ./storage:/var/www/html/storage
       - ./bootstrap/cache:/var/www/html/bootstrap/cache
@@ -85,8 +70,6 @@ services:
 
 volumes:
   mysql_data:
-    driver: local
-  redis_data:
     driver: local
 
 networks:
