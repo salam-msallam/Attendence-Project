@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
         User::create([
             'first_name' => 'robotic',
             'last_name' => 'club', 
-            'email' => 'admin@robotic_club.com',
+            'email' => 'robotic-club@gmail.com',
             'password' => Hash::make('password'), 
             'phone' => '0000000000', 
-            'role' => 'admin',     
+            'role' => 'Admin',     
         ]);
         
         
