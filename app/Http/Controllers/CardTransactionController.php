@@ -51,40 +51,119 @@ class CardTransactionController extends Controller
     }
     
     
-    function GetDateOfAttendance(){
+    function Attendance_Records_For_User(){
         $user = auth()->user();
-        $card_id= $user->id;
-       // $transaction_user=$card_id;
-       $getAllUserTransaction = CardTransaction::where('card_id', $card_id)->get();
-       // $getAllUserTransaction = CardTransaction::all($card_id);
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
-        $attendanceList = $getAllUserTransaction->map(
-            function($transaction){
-                $syriaTime = Carbon::parse($transaction->created_at);
-                return [
-                    'Login Date' => $syriaTime->format('F j, Y'),
-                    'Login Time' => $syriaTime->format('h:i A'),  
-                ];
-            });
-        return response()->json([
-            'user_id' =>$user->id,
-            'attendance_records' => $attendanceList
-        ]);
+        $card =Card::where('user_id',$user->id)->first();
+        if (!$card) {
+            return response()->json(['message' => 'No attendance card found for this user.'], 404);
+        }
+
+        $card_id=$card->id;
+        $transaction = CardTransaction::where('card_id', $card_id)->where('type','enter')->orderBy('created_at','desc')->get();
+
+        $entryRecords = [];
+        foreach($transaction as $transaction){
+            $entryTime = Carbon::parse($transaction->created_at);
+            
+            $entryRecords[] = [
+                'Login Date' => $entryTime->format('F j, Y'), 
+                'Login Time' => $entryTime->format('h:i A'), 
+            ];
+        }
+         return response()->json([
+            'code'=>200,
+            'message'=>"Successfully retrieved this user's entry records" ,
+            'data'=>[
+                'user_id' => $user->id,
+                'entry_records' => $entryRecords
+            ],
+        ]); 
     }
 
 
-    
-    function GetUserProfile(){
+    public function getTotalMonthlyAttendance()
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $card =Card::where('user_id',$user->id)->first();
+
+        if (!$card) {
+            return response()->json(['message' => 'No attendance card found for this user.'], 404);
+        }
+
+        $card_id=$card->id;
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        $transactions = CardTransaction::where('card_id', $card_id)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->orderBy('created_at', 'asc') 
+            ->get();
+
+        $totalDurationInMinutes = 0;
+        $entryTime = null;
+        foreach ($transactions as $transaction) {
+            $currentTime = Carbon::parse($transaction->created_at);
+
+            if ($transaction->type == 'enter') {
+                $entryTime = $currentTime;
+            } elseif ($transaction->type == 'Exit' && $entryTime !== null) {
+                $duration = $entryTime->diffInMinutes($currentTime);
+                
+                $totalDurationInMinutes += $duration;
+
+                $entryTime = null; 
+            }
+        }
+        $totalDurationInHours = $totalDurationInMinutes / 60;
         
-    }
+        $roundedHours = (int)ceil($totalDurationInHours);
 
-    // function FindCardByCode($code){
-    //     $card=Card::find($code);
-    //     $IsFind=false;
-    //     if($card){
-    //         $IsFind=True;
-    //     }
-    //     return $IsFind;
-    // }
+        //Last Login
+        $lastEnter = CardTransaction::where('card_id', $card->id) ->where('type', 'enter')->latest()->first();
+
+        $LastLogin=[];
+        if ($lastEnter) {
+            $transfer = Carbon::parse($lastEnter->created_at);
+            $LastLogin[] = [
+                    'Login Date' => $transfer->format('F j, Y'), 
+                    'Login Time' => $transfer->format('h:i A'), 
+            ];
+        }
+
+        //Last Logout
+        $lastExit = CardTransaction::where('card_id',$card->id)->where('type','Exit')->latest()->first();
+
+        $LastLogout=[];
+        if ($lastExit) {
+             $transfer = Carbon::parse($lastExit->created_at);
+            $LastLogout[] = [
+                    'Logout Date' => $transfer->format('F j, Y'), 
+                    'Logout Time' => $transfer->format('h:i A'), 
+            ];
+        }
+
+        return  response()->json([
+            'code'=>200,
+            'message'=>"The number of attendance hours, last login and last logout have been successfully fetched",
+            'data'=>[
+            'user_id' => $user->id,
+            'month' => Carbon::now()->format('F Y'),
+            'Total Hours of attendance at the club ' => $roundedHours, 
+            'Last Login ' =>$LastLogin,
+            'Last Logout ' =>$LastLogout
+            ],
+        ]);
+
+
+    }
 }
 
