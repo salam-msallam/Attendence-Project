@@ -18,7 +18,7 @@ class AuthController extends Controller
                 'code' =>'401',
                 'message'=>'Unauthorized',
                 'data'=>null
-            ],401);
+            ]);
         }
         $user=auth()->user();
         return response()->json([
@@ -39,13 +39,13 @@ class AuthController extends Controller
                 'code'=>422,
                 'message'=>'Data was invalid',
                 'errors'=>$e->errors()
-            ],422);
+            ]);
         }catch(BadRequestHttpException $e){
             return response()->json([
                 'code'=>400,
                 'message' =>'please check your Json syntax',
                 'data'=>null
-            ],400);
+            ]);
         }
     }
 
@@ -53,7 +53,8 @@ class AuthController extends Controller
         Auth::guard('api')->logout(); 
 
         return response()->json([
+            'code'=>200,
             'message' => 'Successfully logged out '
-        ], 200);
+        ]);
     }
 }

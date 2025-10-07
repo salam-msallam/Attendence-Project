@@ -14,29 +14,57 @@ class CardController extends Controller
 {
     function getAllCards(Request $request){
         $AllCards=Card::all();
-        return $AllCards;
+        if($AllCards){
+        return response()->json([
+            'code'=>200,
+            'message'=>'Get All Cards Successfully',
+            'data'=>[
+                'All Cards'=>$AllCards
+            ]
+            ]);
+        }
     }
 
     function getCard($id){
         $card = Card::find($id);
-        return $card;
+        if($card){
+        return response()->json([
+            'code'=>200,
+            'message'=>'Get Card Successfully',
+            'data'=>[
+                'Card'=>$card
+            ]
+            ]);
+        }
     }
 
     function deleteCard($id){
         $deleteCard=Card::find($id);
         $deleteCard->delete();
-        return "Card deleted";
+        return response()->json([
+            'code'=>404,
+            'message'=>'Card Not Found'],);
     }
 
     function updateCard(Request $request,$id){
         $card =Card::find($id);
         if(!$card){
-             return response()->json(['message'=>'Card Not Found'],404);
+             return response()->json([
+             'code'=>404,
+             'message'=>'Card Not Found']);
         }
         $CodeCardUpdate = $request->only(['code']);
         $card->update($CodeCardUpdate);
         $card->save();
-        return response()->json(['message'=>'Card  Updated successfully'],200);
+        return response()->json([
+            'card'=>200,
+            'message'=>'Card Updated successfully',
+            'data'=>[
+                'card_id'=>$card->id,
+                'new code'=>$card->code,
+            ]
+        
+        ],);
     }
 
     public function createCardForUser(Request $request,$user_id){
@@ -46,14 +74,17 @@ class CardController extends Controller
             $card = $user->card()->create([
                 "code"=>$request->input('code')
             ]);
-            return "card Created successfully";
+            return response()->json([
+                'card'=>404,
+                'message'=>'Card Not Found'],);
         }
-       return "failed there no user with this ID";
+       return response()->json([
+        'card'=>404,
+        'message'=>'failed there no user with this ID'],);
     }catch (UniqueConstraintViolationException $e) { 
             return response()->json([
                 'code' => 409, 
-                'message' => 'The card code is already in use.',
-            ], 409);
+                'message' => 'The card code is already in use.'],);
        } 
     }
 }
