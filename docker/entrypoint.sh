@@ -27,6 +27,12 @@ fi
 # Generate application key
 php artisan key:generate --force
 
+# Generate JWT secret if not exists
+if ! grep -q "JWT_SECRET=" /var/www/html/.env; then
+    echo "JWT_SECRET=" >> /var/www/html/.env
+fi
+php artisan jwt:secret --force
+
 # Run database migrations
 echo "Running database migrations..."
 php artisan migrate --force
