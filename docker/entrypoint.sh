@@ -31,7 +31,7 @@ php artisan key:generate --force
 echo "Running database migrations..."
 php artisan migrate --force
 
-# Run database seeders
+# Run database seeders (only if no users exist)
 echo "Running database seeders..."
 php artisan db:seed --force
 

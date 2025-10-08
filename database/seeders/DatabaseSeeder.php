@@ -16,14 +16,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::create([
-            'first_name' => 'robotic',
-            'last_name' => 'club', 
-            'email' => 'robotic-club@gmail.com',
-            'password' => Hash::make('password'), 
-            'phone' => '0000000000', 
-            'role' => 'Admin',     
-        ]);
+        // Check if user already exists before creating
+        if (!User::where('email', 'robotic-club@gmail.com')->exists()) {
+            User::create([
+                'first_name' => 'robotic',
+                'last_name' => 'club', 
+                'email' => 'robotic-club@gmail.com',
+                'password' => Hash::make('password'), 
+                'phone' => '0000000000', 
+                'role' => 'Admin',     
+            ]);
+        }
         
         
     }
