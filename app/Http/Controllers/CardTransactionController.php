@@ -22,43 +22,57 @@ class CardTransactionController extends Controller
                         'type'=>"enter"
                     ]);
                 
-            return response()->json(["status"=>"Successfully"],201);
+            return response()->json([
+            'code'=>201,
+            'message'=>'The club login process was completed successfully.'],);
         }
-        return  response()->json(["status"=>"Not Found"],404);
+        return  response()->json([
+            'code'=>404,
+            'message'=>'Not Found'],);
+        
     }
     function logoutFromclub(){
         $user = auth()->user();
         if(!$user){
-            return response()->json(['message'=>'Unauthenticated'],401);
+            return response()->json([
+                'code'=>401,
+                'message'=>'Unauthenticated'],);
         }
         $card=Card::where('user_id',$user->id)->first();
         if(!$card){
-            return response()->json(['message'=>'No attendanc card found for this user'],404);
+            return response()->json([
+                'code'=>404,
+                'message'=>'No attendanc card found for this user'],);
         }
         $cardTranaction=CardTransaction::where('card_id',$card->id)->latest()->first();
         if(!$cardTranaction||$cardTranaction->type=="Exit"){
-            return response()->json(['message'=>'you are logout already'],404);
+            return response()->json([
+                'code'=>404,
+                'message'=>'you are logout already'],);
         }
         $cardTranaction=CardTransaction::create([
             'card_id'=>$card->id,
             'type'=>"Exit"
         ]);
-            
-
-        
-    //    $this->CreateCardTransaction($card->code);
+        return response()->json([
+            'code'=>201,
+            'message'=>'The club logout process was completed successfully.'],);
     }
     
     
     function Attendance_Records_For_User(){
         $user = auth()->user();
         if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
+            return response()->json([
+                'code'=>401,
+                'message' => 'Unauthenticated'],);
         }
 
         $card =Card::where('user_id',$user->id)->first();
         if (!$card) {
-            return response()->json(['message' => 'No attendance card found for this user.'], 404);
+            return response()->json([
+                'code'=>404,
+                'message' => 'No attendance card found for this user.'],);
         }
 
         $card_id=$card->id;
@@ -74,9 +88,13 @@ class CardTransactionController extends Controller
             ];
         }
          return response()->json([
-            'user_id' => $user->id,
-            'entry_records' => $entryRecords
-        ], 200);
+            'code'=>200,
+            'message'=>"Successfully retrieved this user's entry records" ,
+            'data'=>[
+                'user_id' => $user->id,
+                'entry_records' => $entryRecords
+            ],
+        ]); 
     }
 
 
@@ -84,13 +102,17 @@ class CardTransactionController extends Controller
     {
         $user = auth()->user();
         if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
+            return response()->json([
+                'code'=>401,
+                'message' => 'Unauthenticated'], );
         }
 
         $card =Card::where('user_id',$user->id)->first();
 
         if (!$card) {
-            return response()->json(['message' => 'No attendance card found for this user.'], 404);
+            return response()->json([
+                'code'=>404,
+                'message' => 'No attendance card found for this user.'], );
         }
 
         $card_id=$card->id;
@@ -146,13 +168,17 @@ class CardTransactionController extends Controller
             ];
         }
 
-        return response()->json([
+        return  response()->json([
+            'code'=>200,
+            'message'=>"The number of attendance hours, last login and last logout have been successfully fetched",
+            'data'=>[
             'user_id' => $user->id,
             'month' => Carbon::now()->format('F Y'),
             'Total Hours of attendance at the club ' => $roundedHours, 
             'Last Login ' =>$LastLogin,
             'Last Logout ' =>$LastLogout
-        ], 200);
+            ],
+        ]);
 
 
     }

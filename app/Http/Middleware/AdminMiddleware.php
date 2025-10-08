@@ -22,7 +22,7 @@ class AdminMiddleware
             'code' => 403,
             'message' => 'Forbidden. This resource requires admin privileges.',
             'data' => null
-        ], 403);
+        ]);
       
     }
 }

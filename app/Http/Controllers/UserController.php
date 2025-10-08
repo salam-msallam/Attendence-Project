@@ -17,13 +17,19 @@ class UserController extends Controller
                 "password"=>$request->input("password"),
                 "role"=>$request->input("role"),
             ]);
-            return $user;
-
+            return response()->json([
+                'code'=>200,
+                'message'=>'Create user Successfully',
+                'data'=>[
+                    'User'=>$user
+                ]
+                ]);
+        
         }catch (UniqueConstraintViolationException $e) { 
             return response()->json([
                 'code' => 409, 
                 'message' => 'The email address is already in use.',
-            ], 409);
+            ],);
             
         } 
         
@@ -32,36 +38,66 @@ class UserController extends Controller
     
     function getAllUsers(){
         $AllUsers=User::all();
-        return $AllUsers;
+        if($AllUsers){
+        return response()->json([
+            'code'=>200,
+            'message'=>'Get All users Successfully',
+            'data'=>[
+                'All User'=>$AllUsers
+            ]
+            ]);
+        }
+        
     }
 
     function getUser($id){
         $user = User::find($id);
         if(!$user){
-            return response()->json(['message'=>'User Not Found'],404);
+            return response()->json([
+                'code'=>404,
+                'message'=>'User Not Found'],);
         }
-        return $user;
+        return response()->json([
+            'code'=>404,
+            'message'=>'User Not Found',
+            'data'=>[
+                'user'=>$user
+            ]
+        ],);
     }
 
     function deleteUser($id){
         $deleteUser=User::find($id);
         if($deleteUser){
              $deleteUser->delete();
-             return "User deleted";
+             return response()->json([
+                'code'=>200,
+                'message'=>'delete user Successfully '],);
         }
-       return response()->json(['message'=>'User Not Found'],404);
+       return response()->json([
+        'code'=>404,
+        'message'=>'User Not Found'],);
        
     }
 
     function updateUser(Request $request,$id){
         $user = User::find($id);
         if(!$user){
-            return response()->json(['message'=>'User Not Found'],404);
+            return response()->json([
+                'code'=>404,
+                'message'=>'User Not Found']);
         }
         $allRequestData = $request->all();
         $user->update($allRequestData);
         $user->save();
-        return response()->json(['message'=>'User Updated successfully'],200);
+        return response()->json([
+            'card'=>200,
+            'message'=>'user Updated successfully',
+            'data'=>[
+                'user'=>$user
+            ]
+        
+        ],);
     }
 }
 
