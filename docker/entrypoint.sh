@@ -28,10 +28,24 @@ fi
 php artisan key:generate --force
 
 # Generate JWT secret if not exists
-if ! grep -q "JWT_SECRET=" /var/www/html/.env; then
-    echo "JWT_SECRET=" >> /var/www/html/.env
+if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www/html/.env; then
+    echo "Generating JWT secret..."
+    php artisan jwt:secret --force || {
+        echo "Artisan JWT secret generation failed, generating manually..."
+        JWT_SECRET=$(openssl rand -base64 32)
+        if grep -q "JWT_SECRET=" /var/www/html/.env; then
+            sed -i "s/JWT_SECRET=.*/JWT_SECRET=$JWT_SECRET/" /var/www/html/.env
+        else
+            echo "JWT_SECRET=$JWT_SECRET" >> /var/www/html/.env
+        fi
+    }
+# Verify JWT secret is set
+if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www/html/.env; then
+    echo "ERROR: JWT_SECRET is still not set!"
+    exit 1
 fi
-php artisan jwt:secret --force
+
+echo "JWT secret verification passed"
 
 # Run database migrations with error handling
 echo "Running database migrations..."
