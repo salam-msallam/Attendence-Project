@@ -33,9 +33,12 @@ if ! grep -q "JWT_SECRET=" /var/www/html/.env; then
 fi
 php artisan jwt:secret --force
 
-# Run database migrations
+# Run database migrations with error handling
 echo "Running database migrations..."
-php artisan migrate --force
+php artisan migrate --force || {
+    echo "Migration failed, trying to reset and migrate fresh..."
+    php artisan migrate:fresh --force --seed
+}
 
 # Run database seeders (only if no users exist)
 echo "Running database seeders..."
