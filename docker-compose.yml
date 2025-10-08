@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: attendance_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-attendance_root_password}
+      MYSQL_DATABASE: ${DB_DATABASE:-attendance_db}
+      MYSQL_USER: ${DB_USERNAME:-attendance_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-attendance_password}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - attendance_network
+    command: --default-authentication-plugin=mysql_native_password
+
+
+  # Laravel Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: attendance_app
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-attendance_db}
+      - DB_USERNAME=${DB_USERNAME:-attendance_user}
+      - DB_PASSWORD=${DB_PASSWORD:-attendance_password}
+      - CACHE_DRIVER=file
+      - SESSION_DRIVER=file
+      - QUEUE_CONNECTION=sync
+    depends_on:
+      - mysql
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    networks:
+      - attendance_network
+    ports:
+      - "8000:80"
+
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  attendance_network:
+    driver: bridge
