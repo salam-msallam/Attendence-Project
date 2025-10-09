@@ -31,33 +31,69 @@ fi
 
 # Generate application key
 echo "Generating application key..."
-if php artisan key:generate --force; then
-    echo "Application key generated successfully"
+
+# Check if APP_KEY is already set and not empty
+APP_KEY_LINE=$(grep "APP_KEY=" /var/www/html/.env)
+if [ -n "$APP_KEY_LINE" ] && [ "$APP_KEY_LINE" != "APP_KEY=" ]; then
+    echo "Application key already exists"
 else
-    echo "Failed to generate application key"
-    exit 1
+    # Generate APP_KEY manually
+    APP_KEY=$(php artisan key:generate --show 2>/dev/null | grep "base64:" | cut -d: -f2 | tr -d ' ')
+
+    if [ -z "$APP_KEY" ]; then
+        # Fallback: generate manually using openssl
+        APP_KEY="base64:$(openssl rand -base64 32)"
+        echo "Generated APP_KEY manually: $APP_KEY"
+    else
+        echo "Generated APP_KEY via artisan: $APP_KEY"
+    fi
+
+    # Write APP_KEY to .env file
+    if grep -q "APP_KEY=" /var/www/html/.env; then
+        sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/" /var/www/html/.env
+        echo "Updated existing APP_KEY line"
+    else
+        echo "APP_KEY=$APP_KEY" >> /var/www/html/.env
+        echo "Added new APP_KEY line"
+    fi
+
+    # Verify the write was successful
+    sleep 1
+    if grep -q "APP_KEY=$APP_KEY" /var/www/html/.env; then
+        echo "Application key written successfully to .env file"
+    else
+        echo "ERROR: Failed to write APP_KEY to .env file"
+        exit 1
+    fi
 fi
 
 # Generate JWT secret if not exists
 if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www/html/.env; then
     echo "Generating JWT secret..."
 
-    # Try artisan command first
-    if php artisan jwt:secret --force; then
-        echo "JWT secret generated via artisan command"
+    # Generate JWT secret manually (artisan command is unreliable in Docker)
+    JWT_SECRET=$(openssl rand -base64 32)
+    echo "Generated JWT secret: $JWT_SECRET"
+
+    # Write JWT secret to .env file
+    if grep -q "JWT_SECRET=" /var/www/html/.env; then
+        # Replace existing empty JWT_SECRET line
+        sed -i "s/JWT_SECRET=.*/JWT_SECRET=$JWT_SECRET/" /var/www/html/.env
+        echo "Updated existing JWT_SECRET line"
     else
-        echo "Artisan JWT secret generation failed, generating manually..."
-        JWT_SECRET=$(openssl rand -base64 32)
-        if grep -q "JWT_SECRET=" /var/www/html/.env; then
-            sed -i "s/JWT_SECRET=.*/JWT_SECRET=$JWT_SECRET/" /var/www/html/.env
-        else
-            echo "JWT_SECRET=$JWT_SECRET" >> /var/www/html/.env
-        fi
-        echo "JWT secret generated manually"
+        # Add new JWT_SECRET line
+        echo "JWT_SECRET=$JWT_SECRET" >> /var/www/html/.env
+        echo "Added new JWT_SECRET line"
     fi
 
-    # Wait a moment for file system sync
+    # Verify the write was successful
     sleep 1
+    if grep -q "JWT_SECRET=$JWT_SECRET" /var/www/html/.env; then
+        echo "JWT secret written successfully to .env file"
+    else
+        echo "ERROR: Failed to write JWT secret to .env file"
+        exit 1
+    fi
 
     echo "JWT secret generation completed"
 else
