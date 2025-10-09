@@ -39,6 +39,8 @@ if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www
             echo "JWT_SECRET=$JWT_SECRET" >> /var/www/html/.env
         fi
     }
+fi
+
 # Verify JWT secret is set
 if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www/html/.env; then
     echo "ERROR: JWT_SECRET is still not set!"
