@@ -24,6 +24,11 @@ if [ ! -f /var/www/html/.env ]; then
     cp /var/www/html/.env.example /var/www/html/.env
 fi
 
+# Ensure APP_KEY line exists in .env
+if ! grep -q "APP_KEY=" /var/www/html/.env; then
+    echo "APP_KEY=" >> /var/www/html/.env
+fi
+
 # Generate application key
 php artisan key:generate --force
 
@@ -39,10 +44,15 @@ if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www
             echo "JWT_SECRET=$JWT_SECRET" >> /var/www/html/.env
         fi
     }
+    echo "JWT secret generation completed"
+else
+    echo "JWT secret already exists"
 fi
 
-# Verify JWT secret is set
-if ! grep -q "JWT_SECRET=" /var/www/html/.env || grep -q "JWT_SECRET=$" /var/www/html/.env; then
+# Verify JWT secret is set (check if it exists and is not empty)
+JWT_SECRET_LINE=$(grep "JWT_SECRET=" /var/www/html/.env)
+echo "Debug: JWT_SECRET_LINE = '$JWT_SECRET_LINE'"
+if [ -z "$JWT_SECRET_LINE" ] || [ "$JWT_SECRET_LINE" = "JWT_SECRET=" ]; then
     echo "ERROR: JWT_SECRET is still not set!"
     exit 1
 fi
