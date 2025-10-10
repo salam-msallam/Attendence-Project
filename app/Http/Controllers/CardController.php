@@ -36,14 +36,25 @@ class CardController extends Controller
             ]
             ]);
         }
+        return response()->json([
+            'code'=>404,
+            'message'=>'Card Not Found'
+        ]);
     }
 
     function deleteCard($id){
         $deleteCard=Card::find($id);
         $deleteCard->delete();
+        if($deleteCard){
+            return response()->json([
+            'code'=>200,
+            'message'=>'Deleted Card Successfully'
+        ]);
+        }
         return response()->json([
             'code'=>404,
-            'message'=>'Card Not Found'],);
+            'message'=>'Card Not Found'
+        ]);
     }
 
     function updateCard(Request $request,$id){
@@ -51,20 +62,20 @@ class CardController extends Controller
         if(!$card){
              return response()->json([
              'code'=>404,
-             'message'=>'Card Not Found']);
+             'message'=>'Card Not Found'
+            ]);
         }
         $CodeCardUpdate = $request->only(['code']);
         $card->update($CodeCardUpdate);
         $card->save();
         return response()->json([
-            'card'=>200,
+            'code'=>200,
             'message'=>'Card Updated successfully',
             'data'=>[
                 'card_id'=>$card->id,
                 'new code'=>$card->code,
             ]
-        
-        ],);
+        ]);
     }
 
     public function createCardForUser(Request $request,$user_id){
@@ -75,16 +86,19 @@ class CardController extends Controller
                 "code"=>$request->input('code')
             ]);
             return response()->json([
-                'card'=>404,
-                'message'=>'Card Not Found'],);
+                'code'=>200,
+                'message'=>'Create Card For This User Successfully'
+            ]);
         }
        return response()->json([
-        'card'=>404,
-        'message'=>'failed there no user with this ID'],);
+        'code'=>404,
+        'message'=>'failed there no user with this ID'
+    ]);
     }catch (UniqueConstraintViolationException $e) { 
             return response()->json([
                 'code' => 409, 
-                'message' => 'The card code is already in use.'],);
-       } 
+                'message' => 'The card code is already in use.'
+            ]);
+       }
     }
 }

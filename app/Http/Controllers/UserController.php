@@ -55,15 +55,16 @@ class UserController extends Controller
         if(!$user){
             return response()->json([
                 'code'=>404,
-                'message'=>'User Not Found'],);
+                'message'=>'User Not Found'
+            ]);
         }
         return response()->json([
-            'code'=>404,
-            'message'=>'User Not Found',
+            'code'=>200,
+            'message'=>'Get  user Successfully',
             'data'=>[
                 'user'=>$user
             ]
-        ],);
+        ]);
     }
 
     function deleteUser($id){
@@ -72,11 +73,13 @@ class UserController extends Controller
              $deleteUser->delete();
              return response()->json([
                 'code'=>200,
-                'message'=>'delete user Successfully '],);
+                'message'=>'delete user Successfully '
+            ]);
         }
        return response()->json([
         'code'=>404,
-        'message'=>'User Not Found'],);
+        'message'=>'User Not Found'
+    ]);
        
     }
 
@@ -96,8 +99,7 @@ class UserController extends Controller
             'data'=>[
                 'user'=>$user
             ]
-        
-        ],);
+        ]);
     }
 }
 
