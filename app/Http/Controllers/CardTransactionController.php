@@ -171,7 +171,7 @@ class CardTransactionController extends Controller
 
         $LastLogout=[];
         if ($lastExit) {
-             $transfer = Carbon::parse($lastExit->created_at);
+            $transfer = Carbon::parse($lastExit->created_at);
             $LastLogout[] = [
                     'Logout Date' => $transfer->format('F j, Y'), 
                     'Logout Time' => $transfer->format('h:i A'), 
@@ -188,6 +188,33 @@ class CardTransactionController extends Controller
             'Last Login ' =>$LastLogin,
             'Last Logout ' =>$LastLogout
             ],
+        ]);
+    }
+
+    function Attendance_Records_By_UserId(Request $request,$user_id){
+        $CardForUser = Card::where('user_id',$user_id)->first();
+         if(!$CardForUser){
+            return response()->json([
+                'code'=>404,
+                'message'=>'No attendance card found for this user'
+            ]);
+        }
+        $CardTranaction= CardTransaction::where('card_id', $CardForUser->id)->where('type', 'enter')->latest()->get();
+        $EntryRecordsForUser = [];
+        foreach($CardTranaction as $CardTranaction){
+            $transfer = Carbon::parse($CardTranaction->created_at);
+            $EntryRecordsForUser[] = [
+                    'Login Date' => $transfer->format('F j, Y'), 
+                    'Login Time' => $transfer->format('h:i A'), 
+            ];
+        }
+        return response()->json([
+            'code'=> 200,
+            'message'=>"This user's login records were successfully fetched ",
+            'data'=>[
+                'user_id' =>$user_id,
+                'Entry records For this user ' => $EntryRecordsForUser
+            ]
         ]);
     }
 }

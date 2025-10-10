@@ -7,6 +7,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Illuminate\Auth\AuthenticationException;
 
 
 class Handler extends ExceptionHandler{
