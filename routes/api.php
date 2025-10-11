@@ -8,13 +8,12 @@ use App\Http\Controllers\CardTransactionController;
 use App\Http\Controllers\AuthController;
 
 
-// Route::delete('/logout', AuthController::class, '@logout');
-
 Route::post('/login',AuthController::class.'@login');
 
 Route ::post('/Transaction/{code}',CardTransactionController::class.'@CreateCardTransaction'); //esp
 
-
+//Attendance-record for Admin by User-id
+Route::get('/Attendance_Records_By_UserId/{user_id}',CardTransactionController::class.'@Attendance_Records_By_UserId');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user_info', function () {

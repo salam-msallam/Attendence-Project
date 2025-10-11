@@ -22,7 +22,7 @@ class AuthController extends Controller
         }
         $user=auth()->user();
         return response()->json([
-            'code' =>'200',
+            'code' =>200,
             'message'=>'user login successfully',
             'data'=>[
                 'id' => $user->id,
