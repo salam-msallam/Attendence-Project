@@ -33,15 +33,15 @@ Route::middleware('auth:api')->group(function () {
 
         //User
         Route::post('/User',UserController::class.'@createUser');
-    
+        
         Route::get('/User',UserController::class.'@getAllUsers');
-    
-        Route::get('/User/{id}',UserController::class.'@getUser');
+
+        Route::get('/User/{id}',UserCOntroller::class.'@getUser');
     
         Route::delete('/User/{id}',UserController::class.'@deleteUser');
     
         Route::put('/User/{id}',UserController::class.'@updateUser');
-    
+
         //Card
         Route::post('/Card/{user_id}',CardController::class.'@createCardForUser');
     
