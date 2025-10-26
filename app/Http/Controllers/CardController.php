@@ -41,9 +41,15 @@ class CardController extends Controller
     function deleteCard($id){
         $deleteCard=Card::find($id);
         $deleteCard->delete();
+        if($deleteCard){
+            return response()->json([
+                'code'=>200,
+                'message'=>'Deleted Card Successfully'],);
+        }
         return response()->json([
             'code'=>404,
             'message'=>'Card Not Found'],);
+        
     }
 
     function updateCard(Request $request,$id){
@@ -57,7 +63,7 @@ class CardController extends Controller
         $card->update($CodeCardUpdate);
         $card->save();
         return response()->json([
-            'card'=>200,
+            'code'=>200,
             'message'=>'Card Updated successfully',
             'data'=>[
                 'card_id'=>$card->id,
@@ -69,14 +75,14 @@ class CardController extends Controller
 
     public function createCardForUser(Request $request,$user_id){
        try{
-        $user=User::find($user_id);
+        $user=User::where('id',$user_id)->first();
         if($user){
             $card = $user->card()->create([
                 "code"=>$request->input('code')
             ]);
             return response()->json([
-                'card'=>404,
-                'message'=>'Card Not Found'],);
+                'code'=>200,
+                'message'=>'Create card for this user successfully'],);
         }
        return response()->json([
         'card'=>404,
