@@ -80,7 +80,7 @@ class CardController extends Controller
 
     public function createCardForUser(Request $request,$user_id){
        try{
-        $user=User::find($user_id);
+        $user=User::where('id',$user_id)->first();
         if($user){
             $card = $user->card()->create([
                 "code"=>$request->input('code')

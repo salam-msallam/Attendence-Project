@@ -16,7 +16,15 @@ class CardTransactionController extends Controller
         $card=Card::where('code',$code)->first();
 
         // Create cardTransacation 
+        /////////////////////////////////////////////
         if($card){
+            $cardTranaction=CardTransaction::where('card_id',$card->id)->latest()->first();
+            if($cardTranaction&&$cardTranaction->type=="enter"){
+                return response()->json([
+                    'code'=>404,
+                    'message'=>'you are login already'],);
+                }
+
                     $cardTranaction=CardTransaction::create([
                         'card_id'=>$card->id,
                         'type'=>"enter"

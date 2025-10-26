@@ -30,27 +30,35 @@ Route::middleware('auth:api')->group(function () {
 
 
     Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->group(function(){
-
+             
         //User
-        Route::post('/User',UserController::class.'@createUser');
+        Route::controller(UserController::class)->group(function(){
+            
+        Route::post('/User','createUser');
+    
+        Route::get('/User','getAllUsers');
+    
+        Route::get('/User/{id}','getUser');
+    
+        Route::delete('/User/{id}','deleteUser');
+    
+        Route::put('/User/{id}','updateUser');
+        });
+
         
-        Route::get('/User',UserController::class.'@getAllUsers');
+           //Card
+        Route::controller(CardController::class)->group(function(){
+    
+        Route::post('/Card/{user_id}','createCardForUser');
+    
+        Route::get('/Card','getAllCards');
+    
+        Route::get('/Card/{card_id}','getCard');
+    
+        Route::put('/Card/{card_id}','updateCard');
+    
+        Route::delete('/Card/{card_id}','deleteCard');
+        });
 
-        Route::get('/User/{id}',UserCOntroller::class.'@getUser');
-    
-        Route::delete('/User/{id}',UserController::class.'@deleteUser');
-    
-        Route::put('/User/{id}',UserController::class.'@updateUser');
-
-        //Card
-        Route::post('/Card/{user_id}',CardController::class.'@createCardForUser');
-    
-        Route::get('/Card',CardController::class.'@getAllCards');
-    
-        Route::get('/Card/{card_id}',CardController::class.'@getCard');
-    
-        Route::put('/Card/{card_id}',CardController::class.'@updateCard');
-    
-        Route::delete('/Card/{card_id}',CardController::class.'@deleteCard');
     });
 
