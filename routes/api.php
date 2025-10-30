@@ -12,7 +12,7 @@ use App\Http\Controllers\AuthController;
 
 Route::post('/login',AuthController::class.'@login');
 
-Route ::post('/Transaction/{code}',CardTransactionController::class.'@CreateCardTransaction'); //esp
+Route ::post('/Transaction/{code}',CardTransactionController::class.'@createCardTransaction'); //esp
 
 
 
@@ -21,10 +21,10 @@ Route::middleware('auth:api')->group(function () {
         return response()->json(auth()->user());
     });
     
-    Route::post('/logoutFromClub',CardTransactionController::class.'@logoutFromclub');
+    Route::post('/logoutFromClub',CardTransactionController::class.'@logoutFromClub');
     Route::get('/Attendance_Records',CardTransactionController::class.'@Attendance_Records_For_User');//Flutter
-    Route::get('/Profile',CardTransactionController::class.'@getTotalMonthlyAttendance');
-    Route::post('/logout',AuthController::class.'@Logout');
+    Route::get('/getTotalMonthlyAttendance',CardTransactionController::class.'@getTotalMonthlyAttendance');
+    Route::post('/logoutFromApp',AuthController::class.'@logout');
     
 });
 

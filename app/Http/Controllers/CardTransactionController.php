@@ -5,66 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Models\CardTransaction;
+use App\Services\CardTransactionServices;
 use Carbon\Carbon;
 
 
 
 class CardTransactionController extends Controller
 {
-    function CreateCardTransaction($code){
-        //Validate & Get card by code
-        $card=Card::where('code',$code)->first();
+    protected $cardTransactionServices;
+    public function __construct(CardTransactionServices $cardTransactionServices){
+        $this->cardTransactionServices=$cardTransactionServices;
+    }
+    function createCardTransaction($code){
 
-        // Create cardTransacation 
-        /////////////////////////////////////////////
-        if($card){
-            $cardTranaction=CardTransaction::where('card_id',$card->id)->latest()->first();
-            if($cardTranaction&&$cardTranaction->type=="enter"){
-                return response()->json([
-                    'code'=>404,
-                    'message'=>'you are login already'],);
-                }
-
-                    $cardTranaction=CardTransaction::create([
-                        'card_id'=>$card->id,
-                        'type'=>"enter"
-                    ]);
-                
-            return response()->json([
-            'code'=>201,
-            'message'=>'The club login process was completed successfully.'],);
-        }
-        return  response()->json([
-            'code'=>404,
-            'message'=>'Not Found'],);
+        $response=$this->cardTransactionServices->createCardTransaction($code);
+        return response()->json([
+                'code'=>201,
+                'message'=>'The club login process was completed successfully.'],);
         
     }
-    function logoutFromclub(){
+    function logoutFromClub(){
         $user = auth()->user();
-        if(!$user){
-            return response()->json([
-                'code'=>401,
-                'message'=>'Unauthenticated'],);
-        }
-        $card=Card::where('user_id',$user->id)->first();
-        if(!$card){
-            return response()->json([
-                'code'=>404,
-                'message'=>'No attendanc card found for this user'],);
-        }
-        $cardTranaction=CardTransaction::where('card_id',$card->id)->latest()->first();
-        if(!$cardTranaction||$cardTranaction->type=="Exit"){
-            return response()->json([
-                'code'=>404,
-                'message'=>'you are logout already'],);
-        }
-        $cardTranaction=CardTransaction::create([
-            'card_id'=>$card->id,
-            'type'=>"Exit"
-        ]);
+        $response=$this->cardTransactionServices->logoutFromClub($user);
         return response()->json([
             'code'=>201,
             'message'=>'The club logout process was completed successfully.'],);
+       
     }
     
     

@@ -15,5 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (RouteNotFoundException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'code' => 401,
+                    'message' => $e->getMessage(), 
+                ]);
+            }
+        });
+        
     })->create();
