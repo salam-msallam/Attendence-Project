@@ -8,97 +8,69 @@ use App\Models\User;
 use Illuminate\Database\QueryException; 
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Support\Facades\Validator;
+use App\Services\CardServices;
+
 
 
 class CardController extends Controller
 {
+    protected $cardServices;
+    public function __construct(CardServices $cardServices){
+        $this->cardServices=$cardServices;
+    }
+
     function getAllCards(Request $request){
-        $AllCards=Card::all();
-        if($AllCards){
-        return response()->json([
-            'code'=>200,
-            'message'=>'Get All Cards Successfully',
-            'data'=>[
-                'All Cards'=>$AllCards
-            ]
-            ]);
-        }
+
+        $response=$this->cardServices->getAllCards();
+            return response()->json([
+                'code'=>200,
+                'message'=>'Get All Cards Successfully',
+                'data'=>[
+                    'All Cards'=>$response
+                ]
+                ]);
+        
     }
 
     function getCard($id){
-        $card = Card::find($id);
-        if($card){
-        return response()->json([
-            'code'=>200,
-            'message'=>'Get Card Successfully',
-            'data'=>[
-                'Card'=>$card
-            ]
+
+        $response = $this->cardServices->getCard($id);
+            return response()->json([
+                'code'=>200,
+                'message'=>'Get Card Successfully',
+                'data'=>[
+                    'Card'=>$response
+                ]
             ]);
-        }
-        return response()->json([
-            'code'=>404,
-            'message'=>'Card Not Found'
-        ]);
+        
     }
 
     function deleteCard($id){
-        $deleteCard=Card::find($id);
-        $deleteCard->delete();
-        if($deleteCard){
-            return response()->json([
-            'code'=>200,
-            'message'=>'Deleted Card Successfully'
-        ]);
-        }
+        $response=$this->cardServices->deleteCard($id);  
         return response()->json([
-            'code'=>404,
-            'message'=>'Card Not Found'
-        ]);
+            'code'=>200,
+            'message'=>'Deleted Card Successfully']);
     }
 
-    function updateCard(Request $request,$id){
-        $card =Card::find($id);
-        if(!$card){
-             return response()->json([
-             'code'=>404,
-             'message'=>'Card Not Found'
-            ]);
-        }
-        $CodeCardUpdate = $request->only(['code']);
-        $card->update($CodeCardUpdate);
-        $card->save();
+    public function updateCard(Request $request, int $id)
+    {
+        $dataToUpdate = $request->only(['code']);
+        $card = $this->cardServices->updateCard($id, $dataToUpdate);
         return response()->json([
-            'code'=>200,
-            'message'=>'Card Updated successfully',
-            'data'=>[
-                'card_id'=>$card->id,
-                'new code'=>$card->code,
+            'code' => 200,
+            'message' => 'Card Updated successfully',
+            'data' => [
+                'card_id' => $card->id,
+                'new_code' => $card->code,
             ]
         ]);
     }
-
-    public function createCardForUser(Request $request,$user_id){
-       try{
-        $user=User::where('id',$user_id)->first();
-        if($user){
-            $card = $user->card()->create([
-                "code"=>$request->input('code')
-            ]);
-            return response()->json([
-                'code'=>200,
-                'message'=>'Create Card For This User Successfully'
-            ]);
-        }
-       return response()->json([
-        'code'=>404,
-        'message'=>'failed there no user with this ID'
-    ]);
-    }catch (UniqueConstraintViolationException $e) { 
-            return response()->json([
-                'code' => 409, 
-                'message' => 'The card code is already in use.'
-            ]);
-       }
+     function createCardForUser(Request $request,$user_id){
+    
+    $data=$request->all();
+    $response=$this->cardServices->createCardForUser($user_id,$data);
+    return response()->json([
+        'code'=>200,
+        'message'=>'Create card for this user successfully']);
     }
 }
