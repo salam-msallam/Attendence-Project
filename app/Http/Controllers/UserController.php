@@ -2,62 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Database\UniqueConstraintViolationException;
+
+use App\Http\Requests\UpdateUserValidateRequest;
+use App\Http\Requests\UserValidateRequest;
+use App\Services\UserService;
+
+
 class UserController extends Controller
 {
-    function createUser(Request $request){
-        try{
-            $user=User::create([
-                "first_name" =>$request->input("first_name"),
-                "last_name" =>$request->input("last_name"),
-                "Phone"=>$request->input("Phone"),
-                "email"=>$request->input("email"),
-                "password"=>$request->input("password"),
-                "role"=>$request->input("role"),
-            ]);
-            return response()->json([
-                'code'=>200,
-                'message'=>'Create user Successfully',
-                'data'=>[
-                    'User'=>$user
-                ]
-                ]);
-        
-        }catch (UniqueConstraintViolationException $e) { 
-            return response()->json([
-                'code' => 409, 
-                'message' => 'The email address is already in use.',
-            ],);
-            
-        } 
-        
+    protected $userService;
+     
+    public function __construct(UserService $userService){
+        $this->userService = $userService;
     }
 
-    
-    function getAllUsers(){
-        $AllUsers=User::all();
-        if($AllUsers){
+    public function index()
+    {
+       $AllUsers = $this->userService->getAllUsers();
+       if($AllUsers){
         return response()->json([
             'code'=>200,
             'message'=>'Get All users Successfully',
             'data'=>[
-                'All User'=>$AllUsers
+                $AllUsers
             ]
             ]);
         }
-        
+       return $AllUsers;
+       
+    }
+    
+    public function store(UserValidateRequest $request)
+    {
+        $validateData = $request->validated();
+        $user = $this->userService->createNewUser($validateData);
+        return response()->json([
+            'code'=>201,
+            'message'=>'Create user Successfully',
+            'data'=>[
+                'User'=>$user
+            ]
+        ]);
     }
 
-    function getUser($id){
-        $user = User::find($id);
-        if(!$user){
-            return response()->json([
-                'code'=>404,
-                'message'=>'User Not Found'
-            ]);
-        }
+    public function show($id)
+    {
+        $user = $this->userService->getSpecificUser($id);
         return response()->json([
             'code'=>200,
             'message'=>'Get  user Successfully',
@@ -67,30 +57,10 @@ class UserController extends Controller
         ]);
     }
 
-    function deleteUser($id){
-        $deleteUser=User::find($id);
-        if($deleteUser){
-             $deleteUser->delete();
-             return response()->json([
-                'code'=>200,
-                'message'=>'delete user Successfully '
-            ]);
-        }
-       return response()->json([
-        'code'=>404,
-        'message'=>'User Not Found'
-    ]);
-       
-    }
-
-    function updateUser(Request $request,$id){
-        $user = User::find($id);
-        if(!$user){
-            return response()->json([
-                'code'=>404,
-                'message'=>'User Not Found']);
-        }
-        $allRequestData = $request->all();
+    public function update(UpdateUserValidateRequest $request, $id)
+    {
+        $user = $this->userService->updateUser($id);
+        $allRequestData = $request->validated();
         $user->update($allRequestData);
         $user->save();
         return response()->json([
@@ -101,5 +71,16 @@ class UserController extends Controller
             ]
         ]);
     }
-}
 
+    public function destroy($id)
+    {
+        $deleteUser = $this->userService->deleteUser($id);
+        if($deleteUser){
+             $deleteUser->delete();
+             return response()->json([
+                'code'=>200,
+                'message'=>'delete user Successfully '
+            ]);
+        }
+    }
+}
