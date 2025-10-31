@@ -38,9 +38,14 @@ class CardController extends Controller
 
     function deleteCard($id){
         $response=$this->cardServices->deleteCard($id);  
-        return response()->json([
+        if($response){
+            $response->delete();
+             return response()->json([
             'code'=>200,
-            'message'=>'Deleted Card Successfully']);
+            'message'=>'Deleted Card Successfully'
+             ]);
+        }
+       
     }
 
     public function updateCard(Request $request, int $id)

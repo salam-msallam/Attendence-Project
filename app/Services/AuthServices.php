@@ -1,40 +1,27 @@
 <?php
 
 namespace App\Services;
-use App\Repositories\AuthRepositories;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Exceptions\UnauthenticatedException;
+use App\Exceptions\UnauthorizedHttpException;
+use App\Exceptions\ValidationException;
+use App\Exceptions\BadRequestHttpException;
 use App\Exceptions\UnauthorizedException;
 
 class AuthServices {
-    
+
     public function loginService($request){
         try{
             $request->validated();
             if (!Auth::attempt($request->only('email', 'password'))) {
-                return response()->json([
-                    'code'=>401,
-                    'message' => 'Unauthorized: Invalid email or password.'
-                ]);
+                throw new UnauthorizedHttpException();
         }
         $user = $request->user();
         $user->tokens()->delete();
         $token = $user->createToken('access_token')->plainTextToken;
         }catch(ValidationException $e){
-            return response()->json([
-                'code'=>422,
-                'message'=>'Data was invalid',
-                'errors'=>$e->errors()
-            ]);
+            throw new ValidationException($e);
         }catch(BadRequestHttpException $e){
-            return response()->json([
-                'code'=>400,
-                'message' =>'please check your Json syntax',
-                'data'=>null
-            ]);
+            throw new BadRequestHttpException();
         }
         return [
             'id' => $user->id,

@@ -12,6 +12,7 @@ class AuthController extends Controller
     public function __construct(AuthServices $authService){
         $this->authService = $authService;
     }
+    
     function login(LoginValidateRequest $request){
         $user = $this->authService->loginService($request);
         return response()->json([

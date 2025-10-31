@@ -36,7 +36,6 @@ class CardServices {
     function deleteCard($id){
         $deleteCard=$this->cardRepository->findCardByID($id);
         if(!$deleteCard){
-            
             throw new ModelNotFoundException();
         }
         return $deleteCard;
