@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\CardValidateRequest;
+use App\Http\Requests\UpdateCardValidateRequest;
 use Illuminate\Database\UniqueConstraintViolationException;
 use App\Models\Card;
 use Illuminate\Http\Request;
@@ -12,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CardController extends Controller
 {
-    function getAllCards(Request $request){
+    function getAllCards(){
         $AllCards=Card::all();
         if($AllCards){
         return response()->json([
@@ -57,7 +60,7 @@ class CardController extends Controller
         ]);
     }
 
-    function updateCard(Request $request,$id){
+    function updateCard(UpdateCardValidateRequest $request,$id){
         $card =Card::find($id);
         if(!$card){
              return response()->json([
@@ -65,7 +68,7 @@ class CardController extends Controller
              'message'=>'Card Not Found'
             ]);
         }
-        $CodeCardUpdate = $request->only(['code']);
+        $CodeCardUpdate = $request->validated();
         $card->update($CodeCardUpdate);
         $card->save();
         return response()->json([
@@ -78,15 +81,13 @@ class CardController extends Controller
         ]);
     }
 
-    public function createCardForUser(Request $request,$user_id){
+    public function createCardForUser(CardValidateRequest $request,$user_id){
        try{
         $user=User::find($user_id);
         if($user){
-            $card = $user->card()->create([
-                "code"=>$request->input('code')
-            ]);
+            $card = $user->card()->create($request->validated());
             return response()->json([
-                'code'=>200,
+                'code'=>201,
                 'message'=>'Create Card For This User Successfully'
             ]);
         }
