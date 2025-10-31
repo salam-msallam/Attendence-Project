@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardTransactionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CardControllerTest;
 
 
 Route::post('/login',AuthController::class.'@login');
@@ -15,38 +16,21 @@ Route ::post('/Transaction/{code}',CardTransactionController::class.'@createCard
 //Attendance-record for Admin by User-id
 Route::get('/Attendance_Records_By_UserId/{user_id}',CardTransactionController::class.'@Attendance_Records_By_UserId');
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('/user_info', function () {
-        return response()->json(auth()->user());
-    });
-    
-    Route::post('/logoutFromClub',CardTransactionController::class.'@logoutFromClub');
-    Route::get('/Attendance_Records',CardTransactionController::class.'@Attendance_Records_For_User');//Flutter
-    Route::get('/getTotalMonthlyAttendance',CardTransactionController::class.'@getTotalMonthlyAttendance');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logoutFromClub',CardTransactionController::class.'@logoutFromclub');
+    Route::get('/attendance_records',CardTransactionController::class.'@Attendance_Records_For_User');//Flutter
+    Route::get('/monthlyAttendance',CardTransactionController::class.'@getTotalMonthlyAttendance');
     Route::post('/logoutFromApp',AuthController::class.'@logout');
     
 });
 
 
+     Route::middleware(['auth:sanctum','App\Http\Middleware\AdminMiddleware::class'])->group(function(){
 
-    Route::middleware(['auth:api','App\Http\Middleware\AdminMiddleware::class'])->group(function(){
-             
         //User
-        Route::controller(UserController::class)->group(function(){
-            
-        Route::post('/User','createUser');
-    
-        Route::get('/User','getAllUsers');
-    
-        Route::get('/User/{id}','getUser');
-    
-        Route::delete('/User/{id}','deleteUser');
-    
-        Route::put('/User/{id}','updateUser');
-        });
-
+        Route::apiResource('User',UserController::class);
         
-           //Card
+        //Card
         Route::controller(CardController::class)->group(function(){
     
         Route::post('/Card/{user_id}','createCardForUser');
@@ -60,5 +44,5 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/Card/{card_id}','deleteCard');
         });
 
-    });
-
+});
+   

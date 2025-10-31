@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
-class CardTransactionNotFoundException extends Exception{
+class CardAttendanceNotFoundException extends Exception{
     
     public function render(): JsonResponse
     {

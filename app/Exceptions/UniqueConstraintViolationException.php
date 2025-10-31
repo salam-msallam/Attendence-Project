@@ -2,18 +2,20 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class UnauthenticatedException extends AuthenticationException
+class UnauthenticatedException extends Exception
 {
-    protected $message = 'Unauthenticated: Token is missing, invalid, Please login again.';
-    public function render(Request $request): JsonResponse
+    protected $message = 'The email address is already in use ';
+    public function render(): JsonResponse
     {
         return response()->json([
-            'code' => 401,
+            'code' => 409,
             'message' => $this->getMessage()
         ]);
+    
     }
 }

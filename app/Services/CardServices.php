@@ -1,10 +1,11 @@
 <?php
  
 namespace App\Services;
-use App\Repository\CardRepository;
+use App\Repositories\CardRepository;
 use App\Exceptions\ModelNotFoundException;
 use App\Exceptions\ConflictHttpException;
 use App\Exceptions\CardUserFoundException;
+use App\Exceptions\UniqueConstraintViolationException;
 use App\Models\Card;
 use App\Models\User;
 
@@ -66,13 +67,6 @@ class CardServices {
         }catch (UniqueConstraintViolationException $e) { 
             throw new ConflictHttpException();
        } 
-
-
     }
- 
-
-
-
-
 
 }

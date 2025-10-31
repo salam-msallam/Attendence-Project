@@ -42,12 +42,13 @@
         $card=Card::where('code',$code)->first();
         return $card;
     }
-    function findCardByUserID($user){
-        $card=Card::where('user_id',$user->id)->first();
+    // function findCardByUserID($user){
+    //     $card=Card::where('user_id',$user->id)->first();
+    //     return $card;
+    // }
+    public function FindCardByUserID($user_id){
+        $card =Card::where('user_id',$user_id)->first();
         return $card;
     }
 
-
-    
-
- }
+}

@@ -1,16 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Database\UniqueConstraintViolationException;
-use App\Models\Card;
+
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Database\QueryException; 
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Support\Facades\Validator;
 use App\Services\CardServices;
-
-
 
 class CardController extends Controller
 {
@@ -28,8 +21,7 @@ class CardController extends Controller
                 'data'=>[
                     'All Cards'=>$response
                 ]
-                ]);
-        
+        ]); 
     }
 
     function getCard($id){
@@ -41,8 +33,7 @@ class CardController extends Controller
                 'data'=>[
                     'Card'=>$response
                 ]
-            ]);
-        
+        ]);  
     }
 
     function deleteCard($id){
@@ -65,7 +56,7 @@ class CardController extends Controller
             ]
         ]);
     }
-     function createCardForUser(Request $request,$user_id){
+    function createCardForUser(Request $request,$user_id){
     
     $data=$request->all();
     $response=$this->cardServices->createCardForUser($user_id,$data);
