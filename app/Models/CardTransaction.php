@@ -10,7 +10,7 @@ use HasFactory;
 
 class CardTransaction extends Model
 {
-    protected $table='Card-Transaction';
+    protected $table='card_transactions';
 
     protected $fillable=[
         'card_id',

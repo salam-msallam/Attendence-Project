@@ -9,15 +9,15 @@ use App\Models\CardTransaction;
 use HasFactory;
 class Card extends Model
 {
-    protected $table='Cards';
+    protected $table='cards';
     protected $fillable=[
         'code'
     ];
-    
+
    public function user():BelongsTo{
     return $this->belongTo(User::class,'user_id');
    }
-   
+
    public function cardTranacion():BelongsTo{
     return $this->belongTo(CardTransaction::class);
 }
