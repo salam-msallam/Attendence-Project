@@ -3,15 +3,18 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use App\Repositories\CardRepository;
 use Illuminate\Database\UniqueConstraintViolationException;
 use App\Exceptions\ModelNotFoundException;
 use App\Exceptions\ConflictHttpException;
 class UserService
 {
     protected $userRepository;
+    protected $CardRepository;
 
-    public function __construct(UserRepository $userRepository){
+    public function __construct(UserRepository $userRepository,CardRepository $CardRepository){
         $this->userRepository=$userRepository;
+        $this->CardRepository=$CardRepository;
     }
 
     public function getAllUsers(){
@@ -50,6 +53,10 @@ class UserService
             throw new ConflictHttpException(); 
         }  
         return $user;
+    }
+
+    public function profile($user_id){
+        return $this->CardRepository->FindCardByUserID($user_id);
     }
         
 }

@@ -83,4 +83,17 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function profile(){
+        $user = auth()->user();
+        $card = $this->userService->profile($user->id);
+        return response()->json([
+            'code'=>200,
+            'message'=>'Seccussfully',
+            'data'=>[
+            'Full Name'=>$user->first_name.' '.$user->last_name,
+            'Card code'=>$card->code
+            ]
+        ]);
+    }
 }

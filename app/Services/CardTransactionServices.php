@@ -148,6 +148,6 @@ use App\Repositories\CardTransactionRepositories;
         }
 
         return $EntryRecordsForUser;
-
     }
+    
 }
