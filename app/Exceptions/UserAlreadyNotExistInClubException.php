@@ -12,7 +12,7 @@ class UserAlreadyNotExistInClubException extends Exception{
         return response()->json([
             'code'=>404,
             'message' => 'you are already logout .'
-            ]);
+            ],404);
     
     }
 }

@@ -13,7 +13,7 @@ class ValidationException  extends Exception{
             'code'=>422,
             'message'=>'Data was invalid',
             'errors'=>$e->errors()
-            ]);
+            ],422);
     
     }
 }

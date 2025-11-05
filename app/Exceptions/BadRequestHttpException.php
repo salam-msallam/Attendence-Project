@@ -13,7 +13,7 @@ class BadRequestHttpException  extends Exception{
             'code'=>400,
             'message' =>'please check your Json syntax',
             'data'=>null
-            ]);
+        ],400);
     
     }
 }

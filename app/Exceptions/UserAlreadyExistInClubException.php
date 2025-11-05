@@ -15,7 +15,7 @@ class UserAlreadyExistInClubException extends Exception
         return response()->json([
             'code' => 404,
             'message' => $this->getMessage()
-        ]);
+        ],404);
     
     }
 }

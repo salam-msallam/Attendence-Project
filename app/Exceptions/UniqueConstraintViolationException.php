@@ -15,7 +15,7 @@ class UniqueConstraintViolationException extends Exception
         return response()->json([
             'code' => 409,
             'message' => $this->getMessage()
-        ]);
+        ],409);
     
     }
 }

@@ -31,7 +31,7 @@ class UserController extends Controller
             'data'=>[
                 $AllUsers
             ]
-            ]);
+            ],200);
         }
        return $AllUsers;
        
@@ -47,7 +47,7 @@ class UserController extends Controller
             'data'=>[
                 'User'=>$user
             ]
-        ]);
+        ],201);
     }
 
     public function show($id)
@@ -59,7 +59,7 @@ class UserController extends Controller
             'data'=>[
                 'user'=>$user
             ]
-        ]);
+        ],200);
     }
 
     public function update(UpdateUserValidateRequest $request, $id)
@@ -74,7 +74,7 @@ class UserController extends Controller
             'data'=>[
                 'user'=>$user
             ]
-        ]);
+        ],200);
     }
 
     public function destroy($id)
@@ -85,7 +85,7 @@ class UserController extends Controller
              return response()->json([
                 'code'=>200,
                 'message'=>'delete user Successfully '
-            ]);
+            ],200);
         }
     }
 
@@ -108,6 +108,6 @@ class UserController extends Controller
             'Gender'=>$user->gender,
             'Type'=>$type
             ]
-        ]);
+        ],200);
     }
 }
