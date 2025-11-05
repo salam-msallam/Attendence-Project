@@ -12,7 +12,7 @@ class UnauthorizedHttpException extends Exception{
         return response()->json([
             'code'=>401,
             'message' => 'Unauthorized: Invalid email or password.'
-            ]);
+            ],401);
             
     
     }

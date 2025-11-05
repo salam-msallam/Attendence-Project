@@ -27,7 +27,7 @@ class AuthController extends Controller
                 'role' => $user['role'],
                 'token' => $user['token']
             ]
-        ]);
+        ],200);
     }
 
     function Logout(Request $request){
@@ -35,6 +35,6 @@ class AuthController extends Controller
         return response()->json([
             'code'=>200,
             'message' => 'Successfully logged out and token revoked '
-        ]);
+        ],200);
     }
 }

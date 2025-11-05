@@ -14,6 +14,6 @@ class RouteNotFoundException extends AuthenticationException
         return response()->json([
             'code' => 401,
             'message' => $this->getMessage()
-        ]);
+        ],401);
     }
 }

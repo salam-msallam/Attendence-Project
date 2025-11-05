@@ -27,6 +27,7 @@ class AuthServices {
             'id' => $user->id,
             'first_name' => $user->first_name ,
             'last_name' => $user->last_name ,
+            'gender'=>$user->gender,
             'phone' => $user->Phone ,
             'email' => $user->email,
             'role' => $user->role ,
