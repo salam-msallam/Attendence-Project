@@ -36,4 +36,5 @@ class CardTransactionRepositories{
         return $cardTransaction;
     }
 
+
 }

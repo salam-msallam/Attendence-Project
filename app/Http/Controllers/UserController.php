@@ -6,14 +6,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserValidateRequest;
 use App\Http\Requests\UserValidateRequest;
 use App\Services\UserService;
+use App\Services\CardTransactionServices;
 
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $cardTransactionServices;
      
-    public function __construct(UserService $userService){
+    public function __construct(UserService $userService ,
+    CardTransactionServices $cardTransactionServices  ){
+
         $this->userService = $userService;
+        $this->cardTransactionServices = $cardTransactionServices;
     }
 
     public function index()
@@ -87,12 +92,21 @@ class UserController extends Controller
     public function profile(){
         $user = auth()->user();
         $card = $this->userService->profile($user->id);
+        $cardTransaction = $this->cardTransactionServices->findCardTransactionByCardID($card);
+        if(!$cardTransaction){
+            $type = "Exit";
+        }
+        else {
+            $type = $cardTransaction->type;
+        }
         return response()->json([
             'code'=>200,
-            'message'=>'Seccussfully',
+            'message'=>'Successfully',
             'data'=>[
             'Full Name'=>$user->first_name.' '.$user->last_name,
-            'Card code'=>$card->code
+            'Card code'=>$card->code,
+            'Gender'=>$user->gender,
+            'Type'=>$type
             ]
         ]);
     }
