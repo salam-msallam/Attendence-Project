@@ -21,7 +21,7 @@ class CardController extends Controller
                 'data'=>[
                     'All Cards'=>$response
                 ]
-        ]); 
+        ],200); 
     }
 
     function getCard($id){
@@ -33,7 +33,7 @@ class CardController extends Controller
                 'data'=>[
                     'Card'=>$response
                 ]
-        ]);  
+        ],200);  
     }
 
     function deleteCard($id){
@@ -43,7 +43,7 @@ class CardController extends Controller
              return response()->json([
             'code'=>200,
             'message'=>'Deleted Card Successfully'
-             ]);
+             ],200);
         }
        
     }
@@ -59,14 +59,14 @@ class CardController extends Controller
                 'card_id' => $card->id,
                 'new_code' => $card->code,
             ]
-        ]);
+        ],200);
     }
     function createCardForUser(Request $request,$user_id){
     
     $data=$request->all();
     $response=$this->cardServices->createCardForUser($user_id,$data);
     return response()->json([
-        'code'=>200,
-        'message'=>'Create card for this user successfully']);
+        'code'=>201,
+        'message'=>'Create card for this user successfully'],201);
     }
 }

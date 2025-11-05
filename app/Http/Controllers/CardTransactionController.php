@@ -16,7 +16,7 @@ class CardTransactionController extends Controller
         $response=$this->cardTransactionServices->createCardTransaction($code);
         return response()->json([
                 'code'=>201,
-                'message'=>'The club login process was completed successfully.'],);
+                'message'=>'The club login process was completed successfully.'],201);
         
     }
 
@@ -24,8 +24,8 @@ class CardTransactionController extends Controller
         $user = auth()->user();
         $response=$this->cardTransactionServices->logoutFromClub($user);
         return response()->json([
-            'code'=>201,
-            'message'=>'The club logout process was completed successfully.'],);
+            'code'=>200,
+            'message'=>'The club logout process was completed successfully.'],200);
        
     }
     
@@ -40,7 +40,7 @@ class CardTransactionController extends Controller
                 'user_id' => $user->id,
                 'entry_records' => $entryRecords
             ],
-        ]); 
+        ],200); 
     }
 
 
@@ -58,7 +58,7 @@ class CardTransactionController extends Controller
             'Last Login ' =>$value ['LastLogin'],
             'Last Logout ' =>$value ['LastLogout']
             ],
-        ]);
+        ],200);
     }
 
     function Attendance_Records_By_UserId($user_id){
@@ -70,7 +70,7 @@ class CardTransactionController extends Controller
                 'user_id' =>$user_id,
                 'Entry records For this user ' => $EntryRecordsForUser
             ]
-        ]);
+        ],200);
     }
 }
 

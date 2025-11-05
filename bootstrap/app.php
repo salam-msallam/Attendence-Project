@@ -24,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'code' => 401,
                     'message' => $e->getMessage(), 
-                ]);
+                ],401);
             }
         });
 

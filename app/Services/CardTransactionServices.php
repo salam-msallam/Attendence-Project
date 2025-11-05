@@ -137,10 +137,10 @@ use App\Repositories\CardTransactionRepositories;
             throw new CardAttendanceNotFoundException();
         }
         
-        $CardTranaction = $this->cardTransactionRepository->getEntryTransactionsByCardId($card->id);
+        $CardTransaction = $this->cardTransactionRepository->getEntryTransactionsByCardId($card->id);
         $EntryRecordsForUser = [];
-        foreach($CardTranaction as $CardTranaction){
-            $transfer = Carbon::parse($CardTranaction->created_at);
+        foreach($CardTransaction as $CardTransaction){
+            $transfer = Carbon::parse($CardTransaction->created_at);
             $EntryRecordsForUser[] = [
                     'Login Date' => $transfer->format('F j, Y'), 
                     'Login Time' => $transfer->format('h:i A'), 
@@ -148,6 +148,9 @@ use App\Repositories\CardTransactionRepositories;
         }
 
         return $EntryRecordsForUser;
-
     }
+    function findCardTransactionByCardID($card){
+        return $this->cardTransactionRepository->findCardTransactionByCardID($card);
+    }
+    
 }

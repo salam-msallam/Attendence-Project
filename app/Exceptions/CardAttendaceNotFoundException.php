@@ -12,7 +12,7 @@ class CardAttendanceNotFoundException extends Exception{
         return response()->json([
             'code'=>404,
             'message' => 'No attendance card found for this user.'
-            ]);
+            ],404);
     
     }
 }
