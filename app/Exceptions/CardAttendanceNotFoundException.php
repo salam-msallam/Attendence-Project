@@ -13,6 +13,6 @@ class CardAttendanceNotFoundException extends Exception{
             'code'=>404,
             'message' => 'No attendance card found for this user.'
             ],404);
-    
+            
     }
 }
