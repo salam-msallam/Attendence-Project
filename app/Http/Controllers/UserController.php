@@ -103,11 +103,11 @@ class UserController extends Controller
             'code'=>200,
             'message'=>'Successfully',
             'data'=>[
-            'Full Name'=>$user->first_name.' '.$user->last_name,
-            'Card code'=>$card->code,
-            'Gender'=>$user->gender,
+            'full_name'=>$user->first_name.' '.$user->last_name,
+            'card_code'=>$card->code,
+            'gender'=>$user->gender,
             'status'=>$type,
-            'Year'=>$user->year,
+            'year'=>$user->year,
             'specialization'=>$user->specialization,
             ]
         ],200);
