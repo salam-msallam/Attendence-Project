@@ -1,4 +1,4 @@
-<?php
+larag<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Card-Transaction',function(Blueprint $table){
+        Schema::create('cards',function(Blueprint $table){
             $table->id();
-            $table->string('type')->default("enter");
-            $table->foreignId('card_id')->constrained()->onDelete('cascade');
+            $table->string('code')->unique();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
         });
@@ -25,6 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('cards', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
     }
 };

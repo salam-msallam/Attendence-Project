@@ -23,18 +23,17 @@ class CardTransactionRepositories{
     return  CardTransaction::where('card_id',$card_id)->where('type','Exit')->latest()->first();
    }
 
-   function findCardTransactionByCardID($card){
+   public function findCardTransactionByCardID($card){
 
         $cardTransaction=CardTransaction::where('card_id',$card->id)->latest()->first();
         return $cardTransaction;
     }
-    function createCardTransaction($card,$type){
+    public function createCardTransaction($card,$type){
         $cardTransaction=CardTransaction::create([
             'card_id'=>$card->id,
             'type'=>$type
         ]);
         return $cardTransaction;
     }
-
 
 }

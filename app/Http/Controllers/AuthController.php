@@ -23,6 +23,8 @@ class AuthController extends Controller
                 'first_name' => $user['first_name'],
                 'last_name' => $user['last_name'],
                 'phone' => $user['phone'],
+                'Year'=> $user['year'],
+                'specialization'=> $user['specialization'],
                 'email' => $user['email'],
                 'role' => $user['role'],
                 'token' => $user['token']

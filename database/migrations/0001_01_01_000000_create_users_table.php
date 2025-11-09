@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('gender');
             $table->string('Phone');
+            $table->string('year');
+            $table->string('specialization');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -41,9 +43,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+   
     public function down(): void
     {
         Schema::dropIfExists('users');

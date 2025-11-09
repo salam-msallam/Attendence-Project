@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'robotic',
             'last_name' => 'club', 
             'gender'=>'male',
+            'year'=>'null',
+            'specialization'=>'null',
             'email' => 'robotic-club@gmail.com',
             'password' => Hash::make('password'), 
             'phone' => '0000000000', 

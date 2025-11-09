@@ -106,7 +106,9 @@ class UserController extends Controller
             'Full Name'=>$user->first_name.' '.$user->last_name,
             'Card code'=>$card->code,
             'Gender'=>$user->gender,
-            'Type'=>$type
+            'Type'=>$type,
+            'Year'=>$user->year,
+            'specialization'=>$user->specialization,
             ]
         ],200);
     }

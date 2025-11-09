@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\CardAttendanceNotFoundException;
 use App\Repositories\UserRepository;
 use App\Repositories\CardRepository;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -56,7 +57,11 @@ class UserService
     }
 
     public function profile($user_id){
-        return $this->CardRepository->FindCardByUserID($user_id);
+        $card =  $this->CardRepository->FindCardByUserID($user_id);
+        if(!$card){
+            throw new CardAttendanceNotFoundException();
+        }
+        return $card;
     }
         
 }
