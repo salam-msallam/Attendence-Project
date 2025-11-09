@@ -21,6 +21,8 @@ class UserValidateRequest extends FormRequest
             'last_name'=>'required|string',
             'gender'=>'required',
             'Phone'=>'required',
+            'year'=>'required',
+            'specialization'=>'required',
             'email'=>'required',
             'password'=>'required',
             'role'=>'required'

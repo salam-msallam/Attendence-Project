@@ -6,12 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('card_transactions',function(Blueprint $table){
+
             $table->id();
             $table->string('type')->default("enter");
             $table->foreignId('card_id')->constrained()->onDelete('cascade');
@@ -20,11 +18,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-     //   Schema::dropIfExists('Card-Transaction');
     }
 };
