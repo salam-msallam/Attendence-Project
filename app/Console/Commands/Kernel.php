@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
    
     protected function schedule(Schedule $schedule): void
     {
-        // **تم التعديل:** الجدولة لتعمل كل دقيقة (لغرض الاختبار)
+        
         $schedule->command('attendance:force-logout')
                  ->everyMinute()
                  ->withoutOverlapping(); 
