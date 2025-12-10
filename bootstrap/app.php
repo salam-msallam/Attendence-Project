@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
 use App\Exceptions\UnauthenticatedException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Illuminate\Http\Request;
@@ -18,12 +19,18 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
+    ->withSchedule(function (Schedule $schedule): void {
+        $schedule->command('attendance:force-logout')
+                 ->dailyAt('00:00')
+                 ->timezone('Asia/Damascus')
+                 ->withoutOverlapping();
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (RouteNotFoundException $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
                     'code' => 401,
-                    'message' => $e->getMessage(), 
+                    'message' => $e->getMessage(),
                 ],401);
             }
         });
