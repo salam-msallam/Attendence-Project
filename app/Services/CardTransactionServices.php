@@ -59,8 +59,8 @@ use App\Repositories\CardTransactionRepositories;
         $transaction = $this->cardTransactionRepository->getEntryTransactionsByCardId($card_id);
         $entryRecords = [];
         foreach($transaction as $transaction){
-            $entryTime = Carbon::parse($transaction->created_at);
-            
+            $entryTime = Carbon::parse($transaction->created_at)->timezone('Asia/Damascus');
+
             $entryRecords[] = [
                 'Login Date' => $entryTime->format('F j, Y'), 
                 'Login Time' => $entryTime->format('h:i A'), 
@@ -76,15 +76,15 @@ use App\Repositories\CardTransactionRepositories;
         }
         $card_id=$card->id;
 
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+        $startOfMonth = Carbon::now('Asia/Damascus')->startOfMonth();
+        $endOfMonth = Carbon::now('Asia/Damascus')->endOfMonth();
 
         $transactions = $this->cardTransactionRepository->getTransactionsByCardId($card_id,$startOfMonth,$endOfMonth);
 
         $totalDurationInMinutes = 0;
         $entryTime = null;
         foreach ($transactions as $transaction) {
-            $currentTime = Carbon::parse($transaction->created_at);
+            $currentTime = Carbon::parse($transaction->created_at)->timezone('Asia/Damascus');
 
             if ($transaction->type == 'enter') {
                 $entryTime = $currentTime;
@@ -105,7 +105,7 @@ use App\Repositories\CardTransactionRepositories;
 
         $LastLogin=[];
         if ($lastEnter) {
-            $transfer = Carbon::parse($lastEnter->created_at);
+            $transfer = Carbon::parse($lastEnter->created_at)->timezone('Asia/Damascus');
             $LastLogin[] = [
                     'Login Date' => $transfer->format('F j, Y'), 
                     'Login Time' => $transfer->format('h:i A'), 
@@ -117,7 +117,7 @@ use App\Repositories\CardTransactionRepositories;
 
         $LastLogout=[];
         if ($lastExit) {
-            $transfer = Carbon::parse($lastExit->created_at);
+            $transfer = Carbon::parse($lastExit->created_at)->timezone('Asia/Damascus');
             $LastLogout[] = [
                     'Logout Date' => $transfer->format('F j, Y'), 
                     'Logout Time' => $transfer->format('h:i A'), 
@@ -140,7 +140,7 @@ use App\Repositories\CardTransactionRepositories;
         $CardTransaction = $this->cardTransactionRepository->getEntryTransactionsByCardId($card->id);
         $EntryRecordsForUser = [];
         foreach($CardTransaction as $CardTransaction){
-            $transfer = Carbon::parse($CardTransaction->created_at);
+            $transfer = Carbon::parse($CardTransaction->created_at)->timezone('Asia/Damascus');
             $EntryRecordsForUser[] = [
                     'Login Date' => $transfer->format('F j, Y'), 
                     'Login Time' => $transfer->format('h:i A'), 
