@@ -17,7 +17,7 @@ class CardTransactionController extends Controller
         return response()->json([
                 'code'=>201,
                 'message'=>'The club login process was completed successfully.'],201);
-        
+
     }
 
     function logoutFromClub(){
@@ -26,10 +26,10 @@ class CardTransactionController extends Controller
         return response()->json([
             'code'=>200,
             'message'=>'The club logout process was completed successfully.'],200);
-       
+
     }
-    
-    
+
+
     function Attendance_Records_For_User(){
         $user = auth()->user();
         $entryRecords = $this->cardTransactionServices->AttendanceService($user);
@@ -40,7 +40,7 @@ class CardTransactionController extends Controller
                 'user_id' => $user->id,
                 'entry_records' => $entryRecords
             ],
-        ],200); 
+        ],200);
     }
 
 
@@ -53,8 +53,8 @@ class CardTransactionController extends Controller
             'message'=>"The number of attendance hours, last login and last logout have been successfully fetched",
             'data'=>[
             'user_id' => $user->id,
-            'month' => Carbon::now()->format('F Y'),
-            'Total Hours of attendance at the club ' => $value ['roundedHours'], 
+            'month' => Carbon::now('Asia/Damascus')->format('F Y'),
+            'Total Hours of attendance at the club ' => $value ['roundedHours'],
             'Last Login ' =>$value ['LastLogin'],
             'Last Logout ' =>$value ['LastLogout']
             ],

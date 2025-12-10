@@ -17,13 +17,14 @@ class Kernel extends ConsoleKernel
         ForceLogoutForgotten::class, // إضافة الأمر ليكون معروفاً لدى Laravel
     ];
 
-   
+
     protected function schedule(Schedule $schedule): void
     {
-        
+
         $schedule->command('attendance:force-logout')
-                 ->everyMinute()
-                 ->withoutOverlapping(); 
+                 ->dailyAt('00:00')
+                 ->timezone('Asia/Damascus')
+                 ->withoutOverlapping();
     }
 
     /**
