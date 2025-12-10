@@ -4,23 +4,24 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Console\Commands\ForceLogoutForgotten; // استيراد الأمر
+use App\Console\Commands\ForceLogoutForgotten;
 
 class Kernel extends ConsoleKernel
 {
     /**
-     * تعريف أوامر Artisan الخاصة بالتطبيق.
+     * The Artisan commands provided by your application.
      *
      * @var array
      */
     protected $commands = [
-        ForceLogoutForgotten::class, // إضافة الأمر ليكون معروفاً لدى Laravel
+        ForceLogoutForgotten::class,
     ];
 
-
+    /**
+     * Define the application's command schedule.
+     */
     protected function schedule(Schedule $schedule): void
     {
-
         $schedule->command('attendance:force-logout')
                  ->dailyAt('00:00')
                  ->timezone('Asia/Damascus')
@@ -28,7 +29,7 @@ class Kernel extends ConsoleKernel
     }
 
     /**
-     * تسجيل أوامر التطبيق.
+     * Register the commands for the application.
      */
     protected function commands(): void
     {
@@ -37,3 +38,4 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 }
+
