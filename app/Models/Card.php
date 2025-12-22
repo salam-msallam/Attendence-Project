@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\cardTranacion;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\CardTransaction;
 use HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Card extends Model
 {
     protected $table='cards';
@@ -18,7 +20,7 @@ class Card extends Model
     return $this->belongTo(User::class,'user_id');
    }
 
-   public function cardTranacion():BelongsTo{
-    return $this->belongTo(CardTransaction::class);
+   public function cardTranacion():HasMany{
+    return $this->hasMany(CardTransaction::class);
 }
 }
