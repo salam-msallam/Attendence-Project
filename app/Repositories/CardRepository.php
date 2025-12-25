@@ -11,6 +11,10 @@
         return $AllCards;
 
     }
+    public function getAllCardsCodes(){
+        $AllCardsCodes = Card::pluck('code')->toArray();
+        return $AllCardsCodes;
+    }
 
     function findCardByID($id){
 

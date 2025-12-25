@@ -17,7 +17,7 @@ class CardTransaction extends Model
         'type'
     ];
 
-    public function cardTranacion():HasMany{
-        return $this->hasMany(Card::class);
+    public function card(){
+        return $this->belongsTo(Card::class,'card_id');
     }
 }

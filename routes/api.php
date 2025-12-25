@@ -6,8 +6,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardTransactionController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CardControllerTest;
+use App\Http\Controllers\unknownCardController;
 
+
+Route::get('/card_codes',[CardController::class,'getAllCardsCodes']);
 
 Route::post('/login',AuthController::class.'@login');
 
@@ -49,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
         Route::delete('/Card/{card_id}','deleteCard');
         });
+        Route::get('/attendance_for_all_users',[CardTransactionController::class,'All_Users_Attendance_Records']);//Dashboard
+        Route::get('/unknown-cards', [unknownCardController::class, 'getUnknownCards']);
 
 });
    
