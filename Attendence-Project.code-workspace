@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../Genius Planet/GPA Managment System/gpa"
+		},
+		{
+			"path": "../robotics-dashboard-v3"
 		}
 	],
 	"settings": {}

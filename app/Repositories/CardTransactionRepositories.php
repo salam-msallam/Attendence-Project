@@ -46,19 +46,19 @@ class CardTransactionRepositories
     }
     public function getAllTransactionsPaginated(int $perPage)
     {
-        return DB::table('card-transaction')
-            ->join('cards', 'card-transaction.card_id', '=', 'cards.id')
+        return DB::table('card_transactions')
+            ->join('cards', 'card_transactions.card_id', '=', 'cards.id')
             ->join('users', 'cards.user_id', '=', 'users.id')
             ->select(
-                'card-transaction.id',
-                'card-transaction.created_at',
-                'card-transaction.type',
+                'card_transactions.id',
+                'card_transactions.created_at',
+                'card_transactions.type',
                 'cards.code as card_code',
                 'users.id as user_id',
                 'users.first_name',
                 'users.last_name'
             )
-            ->orderBy('card-transaction.created_at', 'desc')
-            ->paginate($perPage); 
+            ->orderBy('card_transactions.created_at', 'desc')
+            ->paginate($perPage);
     }
 }
