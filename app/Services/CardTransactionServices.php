@@ -89,7 +89,7 @@ class CardTransactionServices
         $startOfMonth = Carbon::now('Asia/Damascus')->startOfMonth();
         $endOfMonth = Carbon::now('Asia/Damascus')->endOfMonth();
 
-        $transactions = $this->cardTransactionRepository->getTransactionsByCardId($card_id, $startOfMonth, $endOfMonth);
+        $transactions = $this->cardTransactionRepository->getMonthlyTransactionsByCardId($card_id, $startOfMonth, $endOfMonth);
 
         $totalDurationInMinutes = 0;
         $entryTime = null;
@@ -149,14 +149,21 @@ class CardTransactionServices
             throw new CardAttendanceNotFoundException();
         }
 
-        $CardTransaction = $this->cardTransactionRepository->getEntryTransactionsByCardId($card->id);
+        $CardTransaction = $this->cardTransactionRepository->getTransactionsByCardId($card->id);
         $EntryRecordsForUser = [];
-        foreach ($CardTransaction as $CardTransaction) {
-            $transfer = Carbon::parse($CardTransaction->created_at)->timezone('Asia/Damascus');
-            $EntryRecordsForUser[] = [
-                'Login Date' => $transfer->format('F j, Y'),
-                'Login Time' => $transfer->format('h:i A'),
+        foreach ($CardTransaction as $transaction) {
+            $transactionTime = Carbon::parse($transaction->created_at)->timezone('Asia/Damascus');
+            $data = [
+                'type' => $transaction->type,
             ];
+            if ($transaction->type === 'Exit') {
+                $data['logout_date'] = $transactionTime->format('F j, Y');
+                $data['logout_time'] = $transactionTime->format('h:i A');
+            } else {
+                $data['login_date']  = $transactionTime->format('F j, Y');
+                $data['login_time']  = $transactionTime->format('h:i A');
+            }
+            $EntryRecordsForUser[] = $data;
         }
 
         return $EntryRecordsForUser;

@@ -12,7 +12,14 @@ class CardTransactionRepositories
         return CardTransaction::where('card_id', $card_id)->where('type', 'enter')->orderBy('created_at', 'desc')->get();
     }
 
-    public function getTransactionsByCardId($card_id, $startOfMonth, $endOfMonth)
+
+    public function getTransactionsByCardId($card_id)
+    {
+        return CardTransaction::where('card_id', $card_id)->orderBy('created_at', 'desc')->get();
+    }
+
+
+    public function getMonthlyTransactionsByCardId($card_id, $startOfMonth, $endOfMonth)
     {
         return CardTransaction::where('card_id', $card_id)
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
