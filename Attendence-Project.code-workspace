@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../robotics-dashboard-v3"
+		},
+		{
+			"path": "../../Nexus/nexus_portfolio"
 		}
 	],
 	"settings": {}

@@ -19,7 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'https://robotic-dashboard.nexussolutions.tech',
+        // Add other allowed origins here if needed
+        // 'https://example.com',
+    ],
 
     'allowed_origins_patterns' => [],
 
