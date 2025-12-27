@@ -20,9 +20,10 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        '*',
+        'https://robotic-dashboard.nexussolutions.tech', // Production frontend
+        'http://localhost:3000', // Development frontend (Vite default port)
+        'http://localhost:5173', // Development frontend (Vite alternative port)
         // Add other allowed origins here if needed
-        // 'https://example.com',
     ],
 
     'allowed_origins_patterns' => [],
