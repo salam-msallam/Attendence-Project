@@ -69,4 +69,10 @@ class CardController extends Controller
         'code'=>201,
         'message'=>'Create card for this user successfully'],201);
     }
+
+    public function getAllCardsCodes()
+    {
+        $codes = $this->cardServices->getAllCardsCodes();
+        return $codes; 
+    }
 }

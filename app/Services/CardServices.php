@@ -24,6 +24,14 @@ class CardServices {
        
     }
 
+    public function getAllCardsCodes(){
+        $AllCardsCodes = $this->cardRepository->getAllCardsCodes();
+        if (!$AllCardsCodes) {
+            throw new ModelNotFoundException();
+        }
+        return $AllCardsCodes;
+    }
+
     function getCard($id){
         $card = $this->cardRepository->findCardByID($id);
         if(!$card){

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\cardTranacion;
@@ -11,16 +12,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Card extends Model
 {
-    protected $table='cards';
-    protected $fillable=[
-        'code'
+    protected $table = 'Cards';
+    protected $fillable = [
+        'code',
     ];
 
-   public function user():BelongsTo{
-    return $this->belongTo(User::class,'user_id');
-   }
+    public function user(): BelongsTo
+    {
+        return $this->belongTo(User::class, 'user_id');
+    }
 
-   public function cardTranacion():HasMany{
-    return $this->hasMany(CardTransaction::class);
-}
+    public function cardTranacion()
+    {
+        return $this->hasMany(CardTransaction::class);
+    }
 }
