@@ -6,7 +6,7 @@ use App\Models\unknownCard;
 class unknownCardRepository {
     public function getAllCardsCodes()
     {
-        $AllCardsCodes = UnknownCard::pluck('code');
+        $AllCardsCodes = unknownCard::pluck('code');
         return $AllCardsCodes;
     }
 }

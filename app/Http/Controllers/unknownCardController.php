@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Card;
-use App\Models\UnknownCard;
+use App\Models\unknownCard;
 use App\Models\CardTransaction;
 use App\Services\UnknownCardServices;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +20,7 @@ class unknownCardController extends Controller
     }
     public function processScan($code)
     {
-        UnknownCard::Create([
+        unknownCard::Create([
             'code' => $code,
             'updated_at' => Carbon::now()
         ]);

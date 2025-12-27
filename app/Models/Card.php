@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Card extends Model
 {
-    protected $table = 'Cards';
+    protected $table = 'cards';
     protected $fillable = [
         'code',
     ];
