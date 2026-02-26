@@ -30,11 +30,13 @@ class unknownCardController extends Controller
     public function getUnknownCards()
     {
         $unknownCards = $this->unknownCardServices->getUnknownCards();
+        // Return codes in same order (sorted by created_at desc); pluck preserves collection order
+        $codes = $unknownCards->pluck('code')->values();
         return response()->json([
             'code' => 200,
             'message' => 'Successfully retrieved unknown card scans.',
             'data' => [
-                'code'   => $unknownCards
+                'code' => $codes
             ]
         ], 200);
     }
